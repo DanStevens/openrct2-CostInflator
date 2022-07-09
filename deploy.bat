@@ -1,0 +1,1 @@
+copy ".\dev-build\CostInflator.js" "..\OpenRCT2\plugin"

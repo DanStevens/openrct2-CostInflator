@@ -13,7 +13,9 @@ export default {
       format: {
         quote_style: 1,
         wrap_iife: true,
-        preamble: '// Mod powered by https://github.com/wisnia74/openrct2-typescript-mod-template - MIT license',
+        preamble:
+          '// "CostInflator" plugin for OpenRCT2. Copyright (c) 2022 Dan Stevens. Licensed under MIT.\n' +
+          '// https://github.com/DanStevens/openrct2-Inflator',
       },
     }),
   ],

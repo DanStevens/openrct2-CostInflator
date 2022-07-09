@@ -2,13 +2,17 @@
   "name": "openrct2-CostInflator",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "watched-build.js",
   "scripts": {
-    "start": "npm run watch",
+    "test": "jest",
+    "lint": "eslint ./src --ext .js --ext .ts",
     "watch": "nodemon --watch ./src --ext js,ts",
     "build": "npm run lint && rollup --config rollup.config.prod.js",
-    "build:dev": "rollup --config rollup.config.dev.js",
-    "lint": "eslint ./src --ext .js --ext .ts"
+    "build:dev": "rollup --config rollup.config.dev.js && deploy.bat",
+    "start": "..\\openrct2.exe.lnk",
+    "deploy": "deploy.bat",
+    "clean": "DEL dev-build\\CostInflator.js dist\\CostInflator.js",
+    "undeploy": "undeploy.bat"
   },
   "repository": {
     "type": "git",
@@ -21,17 +25,20 @@
   },
   "homepage": "https://github.com/DanStevens/openrct2-CostInflator#readme",
   "devDependencies": {
-    "@rollup/plugin-typescript": "^8.2.0",
-    "@typescript-eslint/eslint-plugin": "^4.0.0",
-    "@typescript-eslint/parser": "^3.10.1",
-    "eslint": "^7.22.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1",
-    "nodemon": "^2.0.7",
-    "rollup": "^2.40.0",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@rollup/plugin-typescript": "^8.3.4",
+    "@types/jest": "^28.1.6",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.20.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "jest": "^28.1.3",
+    "nodemon": "^2.0.19",
+    "rollup": "^2.77.2",
     "rollup-plugin-terser": "^7.0.2",
-    "tslib": "^2.1.0",
-    "typescript": "^4.2.3"
-  },
-  "dependencies": {}
+    "ts-jest": "^28.0.7",
+    "tslib": "^2.4.0",
+    "typescript": "^4.7.4"
+  }
 }
