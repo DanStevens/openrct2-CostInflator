@@ -4,13 +4,14 @@ import { terser } from 'rollup-plugin-terser';
 export default {
   input: './src/registerPlugin.ts',
   output: {
-    file: 'D:\Users\Dan\Documents\OpenRCT2/plugin/CostInflator.js',
+    file: './dev-build/CostInflator.js',
     format: 'iife',
   },
   plugins: [
     typescript(),
     terser({
       format: {
+        beautify: true,
         quote_style: 1,
         wrap_iife: true,
         preamble: '// Mod powered by https://github.com/wisnia74/openrct2-typescript-mod-template - MIT license',

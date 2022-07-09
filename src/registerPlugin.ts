@@ -1,4 +1,4 @@
-/// <reference path="../lib/openrct2.d.ts" />
+/// <reference path="../../OpenRCT2.repo/distribution/openrct2.d.ts" />
 
 import main from './main';
 

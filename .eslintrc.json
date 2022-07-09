@@ -23,7 +23,12 @@
     "no-undef": 0,
     "spaced-comment": 0,
     "max-len": ["error", { "code": 120 }],
-    "import/extensions": ["error", "always", { "js": "never", "ts": "never" }]
+    "import/extensions": ["error", "always", { "js": "never", "ts": "never" }],
+    "linebreak-style": ["error", "windows"],
+    "no-console": "off",
+    "curly": "off",
+    "no-trailing-spaces": ["error", { "skipBlankLines": true }],
+    "arrow-parens": "off"
   },
   "settings": {
     "import/resolver": {

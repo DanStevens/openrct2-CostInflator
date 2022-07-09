@@ -7,8 +7,9 @@
     "start": "npm run watch",
     "watch": "nodemon --watch ./src --ext js,ts",
     "build": "npm run lint && rollup --config rollup.config.prod.js",
-    "build:dev": "rollup --config rollup.config.dev.js",
-    "lint": "eslint ./src --ext .js --ext .ts"
+    "build:dev": "rollup --config rollup.config.dev.js && deploy.bat",
+    "lint": "eslint ./src --ext .js --ext .ts",
+    "clean": "DEL dev-build\\CostInflator.js dist\\CostInflator.js"
   },
   "repository": {
     "type": "git",
