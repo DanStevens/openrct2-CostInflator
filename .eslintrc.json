@@ -28,7 +28,16 @@
     "no-console": "off",
     "curly": "off",
     "no-trailing-spaces": ["error", { "skipBlankLines": true }],
-    "arrow-parens": "off"
+    "arrow-parens": "off",
+    "quotes": "off",
+    "object-property-newline": "off",
+    "comma-dangle": "off",
+    "no-unused-vars": "warn",
+    "no-empty-function": "off",
+    "nonblock-statement-body-position": "off",
+    "operator-linebreak": "off",
+    "lines-between-class-members": "off",
+    "no-nested-ternary": "off"
   },
   "settings": {
     "import/resolver": {
