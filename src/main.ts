@@ -1,24 +1,20 @@
-import hello from './hello';
-import {
-  getPeeps,
-  getStaff,
-  getHandymen,
-  getMechanics,
-  getSecurity,
-  getEntertainers,
-} from './helpers';
-
 const main = (): void => {
-  console.log(`${hello()} Your plug-in has started!`);
+  const enabled = true;
+  const rideUpkeepMultiplier = 2.0;
 
-  console.log(`In your park, there are currently ${getPeeps().length} peeps`);
-  console.log(`${getStaff().length} of them is your staff.`);
+  const handleUpkeepCalculate = (e: RideRatingsCalculateArgs): void => {
+    if (enabled) {
+      const ride = map.getRide(e.rideId);
+      const newUpkeep = ride.runningCost * rideUpkeepMultiplier;
+      console.log(`Setting upkeep of ride ${ride.id} to ${newUpkeep}`);
+      ride.runningCost = newUpkeep;
+    }
+  };
 
-  console.log('Your staff consists of:');
-  console.log(`- ${getHandymen().length} handymen`);
-  console.log(`- ${getMechanics().length} mechanics`);
-  console.log(`- ${getSecurity().length} security`);
-  console.log(`- ${getEntertainers().length} entertainers`);
+  if (enabled) {
+    console.log('Ride upkeep will be multiplied by', rideUpkeepMultiplier);
+    context.subscribe('ride.ratings.calculate', handleUpkeepCalculate);
+  }
 };
 
 export default main;
