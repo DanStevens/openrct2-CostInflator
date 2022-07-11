@@ -1,18 +1,31 @@
+import "./types.d";
+import { SettingsWindow } from "./ui";
+
+const defaultSettings: Settings = {
+  enabled: true,
+  rideUpkeepMultiplier: 1.0
+};
+
 const main = (): void => {
-  const enabled = true;
-  const rideUpkeepMultiplier = 2.0;
+  const settings = defaultSettings;
+  const settingsWindow = new SettingsWindow(ui, settings);
+  
+  ui.registerMenuItem("Cost Inflator", () => settingsWindow.open());
 
   const handleUpkeepCalculate = (e: RideRatingsCalculateArgs): void => {
-    if (enabled) {
+    if (settings.enabled) {
       const ride = map.getRide(e.rideId);
-      const newUpkeep = ride.runningCost * rideUpkeepMultiplier;
-      console.log(`Setting upkeep of ride ${ride.id} to ${newUpkeep}`);
+      const newUpkeep = +(ride.runningCost * settings.rideUpkeepMultiplier).toFixed(2);
+      console.log(`Setting upkeep of ride ${ride.id} to ` +
+                  `${ride.runningCost} * ${settings.rideUpkeepMultiplier} = ${newUpkeep}`);
       ride.runningCost = newUpkeep;
+    } else {
+      console.log("Cost Inflator is disabled");
     }
   };
 
-  if (enabled) {
-    console.log('Ride upkeep will be multiplied by', rideUpkeepMultiplier);
+  if (settings.enabled) {
+    console.log('Ride upkeep will be multiplied by', settings.rideUpkeepMultiplier);
     context.subscribe('ride.ratings.calculate', handleUpkeepCalculate);
   }
 };
