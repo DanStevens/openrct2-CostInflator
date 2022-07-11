@@ -1,0 +1,20 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "build:dev",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build:dev",
+			"detail": "rollup --config rollup.config.dev.js && deploy.bat"
+		},
+		{
+			"type": "npm",
+			"script": "start",
+			"problemMatcher": [],
+			"label": "npm: start",
+			"detail": "..\\openrct2.exe.lnk"
+		}
+	]
+}
