@@ -1,4 +1,3 @@
-import "./types.d";
 import { SettingsWindow } from "./ui";
 
 const defaultSettings: Settings = {
