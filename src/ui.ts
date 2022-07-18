@@ -26,6 +26,7 @@ export class SettingsWindow {
     title: "Cost Inflator",
     width: 200,
     height: 120,
+    onClose: () => this.window = null,
     tabs: [
       {
         image: 0, // TODO
