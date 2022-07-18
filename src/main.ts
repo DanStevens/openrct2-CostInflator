@@ -14,10 +14,14 @@ const main = (): void => {
   const handleUpkeepCalculate = (e: RideRatingsCalculateArgs): void => {
     if (settings.enabled) {
       const ride = map.getRide(e.rideId);
-      const newUpkeep = +(ride.runningCost * settings.rideUpkeepMultiplier).toFixed(2);
-      console.log(`Setting upkeep of ride ${ride.id} to ` +
-                  `${ride.runningCost} * ${settings.rideUpkeepMultiplier} = ${newUpkeep}`);
-      ride.runningCost = newUpkeep;
+      if (ride.runningCost > 0) {
+        const newUpkeep = +(ride.runningCost * settings.rideUpkeepMultiplier).toFixed(2);
+        console.log(`Setting upkeep of ride ${ride.id} to ` +
+                    `${ride.runningCost} * ${settings.rideUpkeepMultiplier} = ${newUpkeep}`);
+        ride.runningCost = newUpkeep;
+      } else {
+        console.log(`Warning: Somehow ride runningCost of ride ${ride.id} (${ride.runningCost}) is negative!`);
+      }
     } else {
       console.log("Cost Inflator is disabled");
     }
