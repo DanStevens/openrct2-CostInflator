@@ -16,6 +16,7 @@ export class SettingsWindow {
       this.window = this.ui.openWindow(this.windowDesc);
       this.rideUpkeepMultiplierSpinner = this.window.findWidget("RideUpkeepMultiplierValue");
       this.enabledCheckbox = this.window.findWidget("EnabledCheckbox");
+      this.syncWithSettings();
     }
 
     this.window.bringToFront();
