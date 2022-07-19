@@ -6,9 +6,12 @@ const defaultSettings: Settings = {
 };
 
 const main = (): void => {
-  const settings = defaultSettings;
+  const parkStorage = context.getParkStorage();
+  const settings = parkStorage.get("settings", defaultSettings);
+  parkStorage.set("settings", settings);
+  console.log("settings", settings);
+
   const settingsWindow = new SettingsWindow(ui, settings);
-  
   ui.registerMenuItem("Cost Inflator", () => settingsWindow.open());
 
   const handleUpkeepCalculate = (e: RideRatingsCalculateArgs): void => {
