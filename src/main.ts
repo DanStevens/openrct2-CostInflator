@@ -1,4 +1,4 @@
-import { SettingsWindow } from "./ui";
+import { SettingsWindow, TestWindow } from "./ui";
 
 const defaultSettings: Settings = {
   enabled: true,
@@ -12,7 +12,9 @@ const main = (): void => {
   console.log("settings", settings);
 
   const settingsWindow = new SettingsWindow(ui, settings);
+  const testWindow = new TestWindow(ui);
   ui.registerMenuItem("Cost Inflator", () => settingsWindow.open());
+  ui.registerMenuItem("Test Window", () => testWindow.open());
 
   const handleUpkeepCalculate = (e: RideRatingsCalculateArgs): void => {
     if (settings.enabled) {

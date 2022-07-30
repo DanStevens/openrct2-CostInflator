@@ -37,7 +37,8 @@
     "nonblock-statement-body-position": "off",
     "operator-linebreak": "off",
     "lines-between-class-members": "off",
-    "no-nested-ternary": "off"
+    "no-nested-ternary": "off",
+    "max-classes-per-file": "off",
   },
   "settings": {
     "import/resolver": {

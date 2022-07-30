@@ -100,3 +100,40 @@ export class SettingsWindow {
     this.rideUpkeepMultiplierSpinner.text = this.settings.rideUpkeepMultiplier.toFixed(2);
   }
 }
+
+export class TestWindow {
+  constructor(private ui: Ui) {}
+
+  private window?: Window;
+  private spinner;
+
+  open() {
+    if (this.window == null) {
+      this.window = this.ui.openWindow(this.windowDesc);
+      this.spinner = this.window.findWidget("Spinner");
+    }
+
+    this.window.bringToFront();
+  }
+
+  private readonly windowDesc: WindowDesc = {
+    classification: "CostInflatorTestWindow",
+    title: "Title",
+    width: 200,
+    height: 90,
+    onClose: () => this.window = null,
+    widgets: [
+      {
+        name: "Spinner",
+        type: 'spinner',
+        x: 10,
+        y: 20,
+        width: 60,
+        height: 15,
+        onIncrement: () => {},
+        onDecrement: () => {},
+        onClick: () => {}
+      }
+    ]
+  }
+}
