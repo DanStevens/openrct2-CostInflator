@@ -1,4 +1,4 @@
-import { NumericSpinner } from '../src/ui';
+import { NumericSpinner } from '../src/widgets';
 
 describe("NumericSpinner", () => {
   it("should implement SpinnerWidget", () => {});

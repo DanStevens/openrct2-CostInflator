@@ -1,4 +1,4 @@
-import { NumericSpinner } from './ui';
+import { NumericSpinner } from './widgets';
 
 export default class TestWindow {
   constructor(private ui: Ui) { }
