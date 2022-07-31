@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-export class NumericSpinner implements SpinnerWidget {
+export class NumericSpinnerImpl implements SpinnerWidget {
   constructor(
     public x: number,
     public y: number,
