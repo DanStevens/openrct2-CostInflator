@@ -1,3 +1,5 @@
+import { NumericSpinner } from './ui';
+
 export default class TestWindow {
   constructor(private ui: Ui) { }
 
@@ -21,24 +23,7 @@ export default class TestWindow {
     height: 90,
     onClose: () => this.window = undefined,
     widgets: [
-      {
-        name: "Spinner",
-        type: 'spinner',
-        x: 10,
-        y: 20,
-        width: 60,
-        height: 15,
-        text: this.value.toFixed(2),
-        onIncrement: () => {
-          this.value += 1;
-          this.updateSpinnerText();
-        },
-        onDecrement: () => {
-          this.value -= 1;
-          this.updateSpinnerText();
-        },
-        onClick: () => { }
-      }
+      new NumericSpinner(10, 20, 60, 15, "Spinner"),
     ]
   };
 

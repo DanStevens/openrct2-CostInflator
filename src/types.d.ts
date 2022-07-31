@@ -1,0 +1,2 @@
+interface NumericSpinnerDesc extends WidgetBase {
+}
