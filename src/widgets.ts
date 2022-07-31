@@ -4,6 +4,8 @@
 export interface NumericSpinner extends Omit<SpinnerWidget, 'text'> {
   /** Get or set the current value of the NumericSpinner */
   value: number;
+  /** Get or set the value  to increment or decrement the value by */
+  step: number;
   /**
    * Bind the NumericSpinner widget to the given OpenRCT2 SpinnerWidget, such that
    * when the value changes, the text of the SpinnerWidget is updated
@@ -30,7 +32,7 @@ export interface NumericSpinnerRecipe extends Omit<WidgetBase, 'type'> {
    * or when the increment/decrement spinner buttons are clicked by the user
    */
   onValueChanged?: (to: number, from: number) => void;
-  /** Optional value to increment or decrement the value. Default is 1 */
+  /** Optional value to increment or decrement the value by. Default is 1 */
   step?: number
 }
 

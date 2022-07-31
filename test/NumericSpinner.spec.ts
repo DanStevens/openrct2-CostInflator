@@ -14,64 +14,80 @@ describe("NumericSpinner class", () => {
     widgets.createNumericSpinner(defaultNumericSpinner()) as SpinnerWidget;
   });
 
-  test("constructor with requires object that implements 'NumericSpinner'", () => {
-    const desc: NumericSpinnerRecipe = {
-      x: 10,
-      y: 20,
-      width: 60,
-      height: 15,
-      name: "NumericSpinner",
-      initialValue: 7,
-    };
-    const objUT = widgets.createNumericSpinner(desc);
-    expect(objUT.x).toBe(10);
-    expect(objUT.y).toBe(20);
-    expect(objUT.width).toBe(60);
-    expect(objUT.height).toBe(15);
-    expect(objUT.name).toBe("NumericSpinner");
-    expect(objUT.value).toBe(7);
-    expect(objUT.toString()).toBe('7.00');
+  describe('constructor', () => {
+    it("requires parameter object that implements 'NumericSpinner'", () => {
+      const desc: NumericSpinnerRecipe = {
+        x: 10,
+        y: 20,
+        width: 60,
+        height: 15,
+        name: "NumericSpinner",
+        initialValue: 7,
+        step: 0.01,
+      };
+      const objUT = widgets.createNumericSpinner(desc);
+      expect(objUT.x).toBe(10);
+      expect(objUT.y).toBe(20);
+      expect(objUT.width).toBe(60);
+      expect(objUT.height).toBe(15);
+      expect(objUT.name).toBe("NumericSpinner");
+      expect(objUT.value).toBe(7);
+      expect(objUT.toString()).toBe('7.00');
+      expect(objUT.step).toBe(0.01);
+    });
   });
 
-  test("'type' property should be 'spinner'", () => {
-    const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
-    expect(objUT.type).toBe("spinner");
+  describe("type property", () => {
+    it("should be literal string type 'spinner'", () => {
+      const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
+      expect(objUT.type).toBe("spinner");
+    });
   });
 
-  it("should have 'value' property, initialized to 0", () => {
-    const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
-    expect(objUT.value).toBe(0);
+  describe("value property", () => {
+    it("should be initialized to 0", () => {
+      const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
+      expect(objUT.value).toBe(0);
+    });
   });
 
-  test("'text' property should match 'value' property formatted to 2 decimal places", () => {
-    const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
-    objUT.value = 12.3456;
-    expect(objUT.toString()).toBe("12.35");
+  describe("toString method", () => {
+    it("should return 'value' property formatted to 2 decimal places", () => {
+      const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
+      objUT.value = 12.3456;
+      expect(objUT.toString()).toBe("12.35");
+    });
   });
 
-  it("should have 'increment' method that increases 'value' property by 1", () => {
-    const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
-    expect(objUT.value).toBe(0);
-    objUT.increment();
-    expect(objUT.value).toBe(1);
-    expect(objUT.toString()).toBe("1.00");
-    objUT.increment();
-    expect(objUT.value).toBe(2);
-    expect(objUT.toString()).toBe("2.00");
+  describe("increment method", () => {
+    it("should increase 'value' property by 'step' property", () => {
+      const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
+      expect(objUT.step).toBe(1);
+      expect(objUT.value).toBe(0);
+      objUT.increment();
+      expect(objUT.value).toBe(1);
+      expect(objUT.toString()).toBe("1.00");
+      objUT.increment();
+      expect(objUT.value).toBe(2);
+      expect(objUT.toString()).toBe("2.00");
+    });
   });
 
-  it("should have 'decrement' method that decreases 'value' property by 1", () => {
-    const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
-    expect(objUT.value).toBe(0);
-    objUT.decrement();
-    expect(objUT.value).toBe(-1);
-    expect(objUT.toString()).toBe("-1.00");
-    objUT.decrement();
-    expect(objUT.value).toBe(-2);
-    expect(objUT.toString()).toBe("-2.00");
+  describe("decrement method", () => {
+    it("should decrease 'value' property by 'step' property", () => {
+      const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
+      expect(objUT.step).toBe(1);
+      expect(objUT.value).toBe(0);
+      objUT.decrement();
+      expect(objUT.value).toBe(-1);
+      expect(objUT.toString()).toBe("-1.00");
+      objUT.decrement();
+      expect(objUT.value).toBe(-2);
+      expect(objUT.toString()).toBe("-2.00");
+    });
   });
 
-  describe("NumericSpinner.onValueChanged property", () => {
+  describe("onValueChanged property", () => {
     it("should be invoked when 'increment' method is called'", () => {
       let wasInvoked = false;
       let toArg: number | undefined;
@@ -142,27 +158,29 @@ describe("NumericSpinner class", () => {
     });
   });
 
-  it("can be bound to a 'SpinnerWidget', such that changing its value updates the text " +
-     "of the SpinnerWidget", () => {
-    const objUT = widgets.createNumericSpinner({
-      x: 0,
-      y: 0,
-      height: 0,
-      width: 0
+  describe('bind method', () => {
+    it("can be used to bind an OpenRCT2 'SpinnerWidget' to the NumericSpinner, " +
+       "such that changing its value updates the text of the SpinnerWidget", () => {
+      const objUT = widgets.createNumericSpinner({
+        x: 0,
+        y: 0,
+        height: 0,
+        width: 0
+      });
+      const spinnerWidget = {
+        x: 0,
+        y: 0,
+        height: 0,
+        width: 0,
+      } as SpinnerWidget;
+      expect(spinnerWidget.text).toBeUndefined();
+      objUT.bind(spinnerWidget);
+      objUT.value = 7;
+      expect(spinnerWidget.text).toBe('7.00');
     });
-    const spinnerWidget = {
-      x: 0,
-      y: 0,
-      height: 0,
-      width: 0,
-    } as SpinnerWidget;
-    expect(spinnerWidget.text).toBeUndefined();
-    objUT.bind(spinnerWidget);
-    objUT.value = 7;
-    expect(spinnerWidget.text).toBe('7.00');
   });
 
-  describe("NumericSpinner.step property", () => {
+  describe("step property", () => {
     test("that when it's 2, calling 'increment' increases 'value' property by 2", () => {
       const objUT = widgets.createNumericSpinner({
         x: 0,
