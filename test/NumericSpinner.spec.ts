@@ -1,4 +1,4 @@
-import { NumericSpinner, NumericSpinnerRecipe, NumericSpinnerImpl } from '../src/widgets';
+import widgets, { NumericSpinnerRecipe } from '../src/widgets';
 
 function defaultNumericSpinner() : NumericSpinnerRecipe {
   return {
@@ -9,8 +9,10 @@ function defaultNumericSpinner() : NumericSpinnerRecipe {
   };
 }
 
-describe("NumericSpinnerImpl", () => {
-  it("should implement SpinnerWidget", () => {});
+describe("NumericSpinner", () => {
+  it("should implement SpinnerWidget", () => {
+    widgets.createNumericSpinner(defaultNumericSpinner()) as SpinnerWidget;
+  });
 
   test("constructor with requires object that implements 'NumericSpinner'", () => {
     const desc: NumericSpinnerRecipe = {
@@ -21,60 +23,61 @@ describe("NumericSpinnerImpl", () => {
       name: "NumericSpinner",
       initialValue: 7,
     };
-    const objUT = new NumericSpinnerImpl(desc);
+    const objUT = widgets.createNumericSpinner(desc);
     expect(objUT.x).toBe(10);
     expect(objUT.y).toBe(20);
     expect(objUT.width).toBe(60);
     expect(objUT.height).toBe(15);
     expect(objUT.name).toBe("NumericSpinner");
     expect(objUT.value).toBe(7);
-    expect(objUT.text).toBe('7.00');
+    expect(objUT.toString()).toBe('7.00');
   });
 
   test("'type' property should be 'spinner'", () => {
-    const objUT = new NumericSpinnerImpl(defaultNumericSpinner());
+    const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
     expect(objUT.type).toBe("spinner");
   });
 
   it("should have 'value' property, initialized to 0", () => {
-    const objUT = new NumericSpinnerImpl(defaultNumericSpinner());
+    const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
     expect(objUT.value).toBe(0);
   });
 
   test("'text' property should match 'value' property formatted to 2 decimal places", () => {
-    const objUT = new NumericSpinnerImpl(defaultNumericSpinner());
+    const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
     objUT.value = 12.3456;
-    expect(objUT.text).toBe("12.35");
+    expect(objUT.toString()).toBe("12.35");
   });
 
   it("should have 'increment' method that increases 'value' property by 1", () => {
-    const objUT = new NumericSpinnerImpl(defaultNumericSpinner());
+    const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
     expect(objUT.value).toBe(0);
     objUT.increment();
     expect(objUT.value).toBe(1);
-    expect(objUT.text).toBe("1.00");
+    expect(objUT.toString()).toBe("1.00");
     objUT.increment();
     expect(objUT.value).toBe(2);
-    expect(objUT.text).toBe("2.00");
+    expect(objUT.toString()).toBe("2.00");
   });
 
   it("should have 'decrement' method that decreases 'value' property by 1", () => {
-    const objUT = new NumericSpinnerImpl(defaultNumericSpinner());
+    const objUT = widgets.createNumericSpinner(defaultNumericSpinner());
     expect(objUT.value).toBe(0);
     objUT.decrement();
     expect(objUT.value).toBe(-1);
-    expect(objUT.text).toBe("-1.00");
+    expect(objUT.toString()).toBe("-1.00");
     objUT.decrement();
     expect(objUT.value).toBe(-2);
-    expect(objUT.text).toBe("-2.00");
+    expect(objUT.toString()).toBe("-2.00");
   });
 
-  it("should invoked 'onValueChanged' callback when 'increment' method is called'", () => {
+  describe("NumericSpinner.onValueChanged property", () => {
+    it("should be invoked when 'increment' method is called'", () => {
     let wasInvoked = false;
     let toArg: number | undefined;
     let fromArg: number | undefined;
 
-    const objUT = new NumericSpinnerImpl({
+    const objUT = widgets.createNumericSpinner({
       x: 0,
       y: 0,
       height: 0,
@@ -92,12 +95,12 @@ describe("NumericSpinnerImpl", () => {
     expect(fromArg).toBe(0);
   });
 
-  it("should invoked 'onValueChanged' callback when 'decrement' method is called ", () => {
+    it("should be invoked when 'decrement' method is called ", () => {
     let wasInvoked = false;
     let toArg: number | undefined;
     let fromArg: number | undefined;
 
-    const objUT = new NumericSpinnerImpl({
+    const objUT = widgets.createNumericSpinner({
       x: 0,
       y: 0,
       height: 0,
@@ -115,12 +118,12 @@ describe("NumericSpinnerImpl", () => {
     expect(fromArg).toBe(0);
   });
 
-  it("should invoked 'onValueChanged' callback when 'value' property is set", () => {
+    it("should be invoked when 'value' property is set", () => {
     let wasInvoked = false;
     let toArg: number | undefined;
     let fromArg: number | undefined;
 
-    const objUT = new NumericSpinnerImpl({
+    const objUT = widgets.createNumericSpinner({
       x: 0,
       y: 0,
       height: 0,
@@ -137,10 +140,11 @@ describe("NumericSpinnerImpl", () => {
     expect(toArg).toBe(7);
     expect(fromArg).toBe(3);
   });
+  });
 
   it("can be bound to a 'SpinnerWidget', such that changing its value updates the text " +
      "of the SpinnerWidget", () => {
-    const objUT = new NumericSpinnerImpl({
+    const objUT = widgets.createNumericSpinner({
       x: 0,
       y: 0,
       height: 0,

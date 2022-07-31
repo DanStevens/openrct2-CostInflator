@@ -1,22 +1,23 @@
-import { NumericSpinnerImpl } from './widgets';
+import widgets from './widgets';
 
 export default class TestWindow {
   constructor(private ui: Ui) { }
 
-  private readonly numericSpinner = new NumericSpinnerImpl({
+  private value: number = 0;
+  private window?: Window;
+
+  private readonly numericSpinner = widgets.createNumericSpinner({
     x: 10,
     y: 20,
     height: 15,
     width: 60,
     name: "NumericSpinner",
+    initialValue: this.value,
     onValueChanged: to => {
       this.value = to;
       console.log('TestWindow.value', this.value);
     },
   });
-
-  private window?: Window;
-  private value: number = 0;
 
   open() {
     if (this.window == null) {
