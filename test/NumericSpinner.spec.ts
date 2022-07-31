@@ -1,10 +1,25 @@
-import { NumericSpinnerImpl } from '../src/widgets';
+import { NumericSpinner, NumericSpinnerImpl } from '../src/widgets';
+
+function defaultNumericSpinner() : NumericSpinner {
+  return {
+    x: 0,
+    y: 0,
+    height: 0,
+    width: 0
+  };
+}
 
 describe("NumericSpinnerImpl", () => {
   it("should implement SpinnerWidget", () => {});
 
-  it("should have a constructor which requires position and dimentions", () => {
-    const objUT = new NumericSpinnerImpl(10, 20, 60, 15);
+  test("constructor with requires object that implements 'NumericSpinner'", () => {
+    const desc: NumericSpinner = {
+      x: 10,
+      y: 20,
+      width: 60,
+      height: 15
+    };
+    const objUT = new NumericSpinnerImpl(desc);
     expect(objUT.x).toBe(10);
     expect(objUT.y).toBe(20);
     expect(objUT.width).toBe(60);
@@ -12,23 +27,23 @@ describe("NumericSpinnerImpl", () => {
   });
 
   test("'type' property should be 'spinner'", () => {
-    const objUT = new NumericSpinnerImpl(0, 0, 0, 0);
+    const objUT = new NumericSpinnerImpl(defaultNumericSpinner());
     expect(objUT.type).toBe("spinner");
   });
 
   it("should have 'value' property, initialized to 0", () => {
-    const objUT = new NumericSpinnerImpl(0, 0, 0, 0);
+    const objUT = new NumericSpinnerImpl(defaultNumericSpinner());
     expect(objUT.value).toBe(0);
   });
 
   test("'text' property should match 'value' property formatted to 2 decimal places", () => {
-    const objUT = new NumericSpinnerImpl(0, 0, 0, 0);
+    const objUT = new NumericSpinnerImpl(defaultNumericSpinner());
     objUT.value = 12.3456;
     expect(objUT.text).toBe("12.35");
   });
 
   it("should have 'increment' method that increases 'value' property by 1", () => {
-    const objUT = new NumericSpinnerImpl(0, 0, 0, 0);
+    const objUT = new NumericSpinnerImpl(defaultNumericSpinner());
     expect(objUT.value).toBe(0);
     objUT.increment();
     expect(objUT.value).toBe(1);
@@ -39,7 +54,7 @@ describe("NumericSpinnerImpl", () => {
   });
 
   it("should have 'decrement' method that decreases 'value' property by 1", () => {
-    const objUT = new NumericSpinnerImpl(0, 0, 0, 0);
+    const objUT = new NumericSpinnerImpl(defaultNumericSpinner());
     expect(objUT.value).toBe(0);
     objUT.decrement();
     expect(objUT.value).toBe(-1);

@@ -1,4 +1,4 @@
-import { NumericSpinnerImpl } from './widgets';
+import widgets from './widgets';
 
 export default class TestWindow {
   constructor(private ui: Ui) { }
@@ -23,7 +23,12 @@ export default class TestWindow {
     height: 90,
     onClose: () => this.window = undefined,
     widgets: [
-      new NumericSpinnerImpl(10, 20, 60, 15, "Spinner"),
+      widgets.createNumericSpinner({
+        x: 10,
+        y: 20,
+        height: 15,
+        width: 60
+      })
     ]
   };
 

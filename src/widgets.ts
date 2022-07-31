@@ -1,13 +1,20 @@
-/* eslint-disable import/prefer-default-export */
+export interface NumericSpinner extends Omit<WidgetBase, 'type'> {
+}
+
 export class NumericSpinnerImpl implements SpinnerWidget {
-  constructor(
-    public x: number,
-    public y: number,
-    public width: number,
-    public height: number,
-    public name?: string,
-  ) { }
+  constructor(desc: NumericSpinner) {
+    this.x = desc.x;
+    this.y = desc.y;
+    this.height = desc.height;
+    this.width = desc.width;
+  }
+
   readonly type = "spinner";
+  public x: number;
+  public y: number;
+  public width: number;
+  public height: number;
+  public name?: string;
   private _value: number = 0;
 
   text?: string | undefined = this.value.toFixed(2);
@@ -35,5 +42,11 @@ export class NumericSpinnerImpl implements SpinnerWidget {
 
   decrement() {
     this.value -= 1;
+  }
+}
+
+export default abstract class WidgetFactory {
+  static createNumericSpinner(desc: NumericSpinner): SpinnerWidget {
+    return new NumericSpinnerImpl(desc);
   }
 }
