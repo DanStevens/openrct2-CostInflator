@@ -9,7 +9,7 @@ function defaultNumericSpinner() : NumericSpinnerRecipe {
   };
 }
 
-describe("NumericSpinner", () => {
+describe("NumericSpinner class", () => {
   it("should implement SpinnerWidget", () => {
     widgets.createNumericSpinner(defaultNumericSpinner()) as SpinnerWidget;
   });
@@ -73,73 +73,73 @@ describe("NumericSpinner", () => {
 
   describe("NumericSpinner.onValueChanged property", () => {
     it("should be invoked when 'increment' method is called'", () => {
-    let wasInvoked = false;
-    let toArg: number | undefined;
-    let fromArg: number | undefined;
+      let wasInvoked = false;
+      let toArg: number | undefined;
+      let fromArg: number | undefined;
 
-    const objUT = widgets.createNumericSpinner({
-      x: 0,
-      y: 0,
-      height: 0,
-      width: 0,
-      initialValue: 0,
-      onValueChanged: (to, from) => {
-        wasInvoked = true;
-        toArg = to;
-        fromArg = from;
-      }
+      const objUT = widgets.createNumericSpinner({
+        x: 0,
+        y: 0,
+        height: 0,
+        width: 0,
+        initialValue: 0,
+        onValueChanged: (to, from) => {
+          wasInvoked = true;
+          toArg = to;
+          fromArg = from;
+        }
+      });
+      objUT.increment();
+      expect(wasInvoked).toBe(true);
+      expect(toArg).toBe(1);
+      expect(fromArg).toBe(0);
     });
-    objUT.increment();
-    expect(wasInvoked).toBe(true);
-    expect(toArg).toBe(1);
-    expect(fromArg).toBe(0);
-  });
 
     it("should be invoked when 'decrement' method is called ", () => {
-    let wasInvoked = false;
-    let toArg: number | undefined;
-    let fromArg: number | undefined;
+      let wasInvoked = false;
+      let toArg: number | undefined;
+      let fromArg: number | undefined;
 
-    const objUT = widgets.createNumericSpinner({
-      x: 0,
-      y: 0,
-      height: 0,
-      width: 0,
-      initialValue: 0,
-      onValueChanged: (to, from) => {
-        wasInvoked = true;
-        toArg = to;
-        fromArg = from;
-      }
+      const objUT = widgets.createNumericSpinner({
+        x: 0,
+        y: 0,
+        height: 0,
+        width: 0,
+        initialValue: 0,
+        onValueChanged: (to, from) => {
+          wasInvoked = true;
+          toArg = to;
+          fromArg = from;
+        }
+      });
+      objUT.decrement();
+      expect(wasInvoked).toBe(true);
+      expect(toArg).toBe(-1);
+      expect(fromArg).toBe(0);
     });
-    objUT.decrement();
-    expect(wasInvoked).toBe(true);
-    expect(toArg).toBe(-1);
-    expect(fromArg).toBe(0);
-  });
 
     it("should be invoked when 'value' property is set", () => {
-    let wasInvoked = false;
-    let toArg: number | undefined;
-    let fromArg: number | undefined;
+      let wasInvoked = false;
+      let toArg: number | undefined;
+      let fromArg: number | undefined;
 
-    const objUT = widgets.createNumericSpinner({
-      x: 0,
-      y: 0,
-      height: 0,
-      width: 0,
-      initialValue: 3,
-      onValueChanged: (to, from) => {
-        wasInvoked = true;
-        toArg = to;
-        fromArg = from;
-      }
+      const objUT = widgets.createNumericSpinner({
+        x: 0,
+        y: 0,
+        height: 0,
+        width: 0,
+        initialValue: 3,
+        onValueChanged: (to, from) => {
+          wasInvoked = true;
+          toArg = to;
+          fromArg = from;
+        }
+      });
+      objUT.value = 7;
+      expect(wasInvoked).toBe(true);
+      expect(toArg).toBe(7);
+      expect(fromArg).toBe(3);
     });
-    objUT.value = 7;
-    expect(wasInvoked).toBe(true);
-    expect(toArg).toBe(7);
-    expect(fromArg).toBe(3);
-  });
   });
 
   it("can be bound to a 'SpinnerWidget', such that changing its value updates the text " +
@@ -160,5 +160,84 @@ describe("NumericSpinner", () => {
     objUT.bind(spinnerWidget);
     objUT.value = 7;
     expect(spinnerWidget.text).toBe('7.00');
+  });
+
+  describe("NumericSpinner.step property", () => {
+    test("that when it's 2, calling 'increment' increases 'value' property by 2", () => {
+      const objUT = widgets.createNumericSpinner({
+        x: 0,
+        y: 0,
+        height: 0,
+        width: 0,
+        step: 2,
+      });
+      expect(objUT.value).toBe(0);
+      objUT.increment();
+      expect(objUT.value).toBe(2);
+    });
+
+    test("that when it's 2, calling 'decrement' decreases 'value' property by 2", () => {
+      const objUT = widgets.createNumericSpinner({
+        x: 0,
+        y: 0,
+        height: 0,
+        width: 0,
+        step: 2,
+      });
+      expect(objUT.value).toBe(0);
+      objUT.decrement();
+      expect(objUT.value).toBe(-2);
+      objUT.decrement();
+      expect(objUT.value).toBe(-4);
+    });
+
+    test("that when it's 0.01, calling 'increment' increases 'value' property by 0.01", () => {
+      const objUT = widgets.createNumericSpinner({
+        x: 0,
+        y: 0,
+        height: 0,
+        width: 0,
+        step: 0.01,
+      });
+      expect(objUT.value).toBe(0);
+      objUT.increment();
+      expect(objUT.value).toBe(0.01);
+      objUT.increment();
+      expect(objUT.value).toBe(0.02);
+    });
+
+    test("that when it's 0.01, calling 'decrement' decreases 'value' property by 0.01", () => {
+      const objUT = widgets.createNumericSpinner({
+        x: 0,
+        y: 0,
+        height: 0,
+        width: 0,
+        step: 0.01,
+      });
+      expect(objUT.value).toBe(0);
+      objUT.decrement();
+      expect(objUT.value).toBe(-0.01);
+      objUT.decrement();
+      expect(objUT.value).toBe(-0.02);
+    });
+
+    test("that negative step inverts increment/decrement behavior", () => {
+      const objUT = widgets.createNumericSpinner({
+        x: 0,
+        y: 0,
+        height: 0,
+        width: 0,
+        step: -1,
+      });
+      expect(objUT.value).toBe(0);
+      objUT.increment();
+      expect(objUT.value).toBe(-1);
+      objUT.decrement();
+      expect(objUT.value).toBe(0);
+      objUT.decrement();
+      expect(objUT.value).toBe(1);
+      objUT.increment();
+      expect(objUT.value).toBe(0);
+    });
   });
 });

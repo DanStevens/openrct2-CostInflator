@@ -43,6 +43,7 @@ class NumericSpinnerImpl implements NumericSpinner {
     this.name = recipe.name;
     this.value = recipe.initialValue ?? 0;
     this.onValueChanged = recipe.onValueChanged;
+    this.step = recipe.step ?? 1;
   }
 
   readonly type = "spinner";
@@ -51,6 +52,7 @@ class NumericSpinnerImpl implements NumericSpinner {
   public width: number;
   public height: number;
   public name?: string;
+  public step: number;
 
   private _value: number = 0;
   private _boundSpinner?: SpinnerWidget;
@@ -78,11 +80,11 @@ class NumericSpinnerImpl implements NumericSpinner {
   }
 
   increment() {
-    this.value += 1;
+    this.value += this.step;
   }
 
   decrement() {
-    this.value -= 1;
+    this.value -= this.step;
   }
 
   bind(spinner: SpinnerWidget) {
