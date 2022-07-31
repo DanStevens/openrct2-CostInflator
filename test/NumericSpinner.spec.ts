@@ -137,4 +137,24 @@ describe("NumericSpinnerImpl", () => {
     expect(toArg).toBe(7);
     expect(fromArg).toBe(3);
   });
+
+  it("can be bound to a 'SpinnerWidget', such that changing its value updates the text " +
+     "of the SpinnerWidget", () => {
+    const objUT = new NumericSpinnerImpl({
+      x: 0,
+      y: 0,
+      height: 0,
+      width: 0
+    });
+    const spinnerWidget = {
+      x: 0,
+      y: 0,
+      height: 0,
+      width: 0,
+    } as SpinnerWidget;
+    expect(spinnerWidget.text).toBeUndefined();
+    objUT.bind(spinnerWidget);
+    objUT.value = 7;
+    expect(spinnerWidget.text).toBe('7.00');
+  });
 });

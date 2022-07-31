@@ -3,7 +3,7 @@ export interface NumericSpinner extends Omit<WidgetBase, 'type'> {
   onValueChanged?: (to: number, from: number) => void;
 }
 
-export class NumericSpinnerImpl implements SpinnerWidget {
+export class NumericSpinnerImpl implements NumericSpinner {
   constructor(desc: NumericSpinner) {
     this.x = desc.x;
     this.y = desc.y;
@@ -20,7 +20,9 @@ export class NumericSpinnerImpl implements SpinnerWidget {
   public width: number;
   public height: number;
   public name?: string;
+
   private _value: number = 0;
+  private _boundSpinner?: SpinnerWidget;
 
   text?: string = this.value.toFixed(2);
   window?: Window;
@@ -40,8 +42,14 @@ export class NumericSpinnerImpl implements SpinnerWidget {
   set value(to) {
     const from = this._value;
     this._value = to;
-    this.text = this._value.toFixed(2);
+    const newLocal = this._value.toFixed(2);
+    this.setText(newLocal);
     this.invokeValueChanged(to, from);
+  }
+
+  private setText(value: string) {
+    this.text = value;
+    if (this._boundSpinner) this._boundSpinner.text = value;
   }
 
   increment() {
@@ -52,6 +60,10 @@ export class NumericSpinnerImpl implements SpinnerWidget {
     this.value -= 1;
   }
 
+  bind(spinner: SpinnerWidget) {
+    this._boundSpinner = spinner;
+  }
+
   private invokeValueChanged(to: number, from: number) {
     if (typeof this.onValueChanged === 'function')
       this.onValueChanged(to, from);
@@ -59,7 +71,7 @@ export class NumericSpinnerImpl implements SpinnerWidget {
 }
 
 export default abstract class WidgetFactory {
-  static createNumericSpinner(desc: NumericSpinner): SpinnerWidget {
+  static createNumericSpinner(desc: NumericSpinner): NumericSpinner {
     return new NumericSpinnerImpl(desc);
   }
 }

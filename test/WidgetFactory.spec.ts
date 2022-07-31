@@ -1,8 +1,8 @@
-import widgets, { NumericSpinnerImpl } from '../src/widgets';
+import widgets, { NumericSpinner, NumericSpinnerImpl } from '../src/widgets';
 
 describe("WidgetFactory", () => {
   test("creating NumericSpinner", () => {
-    const numericSpinner: SpinnerWidget = widgets.createNumericSpinner({
+    const numericSpinner: NumericSpinner = widgets.createNumericSpinner({
       x: 0,
       y: 0,
       width: 0,
