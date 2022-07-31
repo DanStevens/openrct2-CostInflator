@@ -20,15 +20,15 @@ export class NumericSpinnerImpl implements SpinnerWidget {
   public name?: string;
   private _value: number = 0;
 
-  text?: string | undefined = this.value.toFixed(2);
-  window?: Window | undefined;
-  tooltip?: string | undefined;
-  isDisabled?: boolean | undefined;
-  isVisible?: boolean | undefined;
+  text?: string = this.value.toFixed(2);
+  window?: Window;
+  tooltip?: string;
+  isDisabled?: boolean;
+  isVisible?: boolean;
 
-  onIncrement?: (() => void) | undefined = () => this.increment();
-  onDecrement?: (() => void) | undefined = () => this.decrement();
-  onClick?: (() => void) | undefined;
+  onIncrement?: (() => void) = () => this.increment();
+  onDecrement?: (() => void) = () => this.decrement();
+  onClick?: (() => void);
 
   get value() {
     return this._value;
