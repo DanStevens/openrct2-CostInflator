@@ -1,6 +1,6 @@
-import { NumericSpinner, NumericSpinnerImpl } from '../src/widgets';
+import { NumericSpinner, NumericSpinnerRecipe, NumericSpinnerImpl } from '../src/widgets';
 
-function defaultNumericSpinner() : NumericSpinner {
+function defaultNumericSpinner() : NumericSpinnerRecipe {
   return {
     x: 0,
     y: 0,
@@ -13,13 +13,13 @@ describe("NumericSpinnerImpl", () => {
   it("should implement SpinnerWidget", () => {});
 
   test("constructor with requires object that implements 'NumericSpinner'", () => {
-    const desc: NumericSpinner = {
+    const desc: NumericSpinnerRecipe = {
       x: 10,
       y: 20,
       width: 60,
       height: 15,
       name: "NumericSpinner",
-      value: 7,
+      initialValue: 7,
     };
     const objUT = new NumericSpinnerImpl(desc);
     expect(objUT.x).toBe(10);
@@ -79,7 +79,7 @@ describe("NumericSpinnerImpl", () => {
       y: 0,
       height: 0,
       width: 0,
-      value: 0,
+      initialValue: 0,
       onValueChanged: (to, from) => {
         wasInvoked = true;
         toArg = to;
@@ -102,7 +102,7 @@ describe("NumericSpinnerImpl", () => {
       y: 0,
       height: 0,
       width: 0,
-      value: 0,
+      initialValue: 0,
       onValueChanged: (to, from) => {
         wasInvoked = true;
         toArg = to;
@@ -125,7 +125,7 @@ describe("NumericSpinnerImpl", () => {
       y: 0,
       height: 0,
       width: 0,
-      value: 3,
+      initialValue: 3,
       onValueChanged: (to, from) => {
         wasInvoked = true;
         toArg = to;

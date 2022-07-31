@@ -1,16 +1,21 @@
-export interface NumericSpinner extends Omit<WidgetBase, 'type'> {
-  value?: number;
+export interface NumericSpinner extends Omit<SpinnerWidget, 'text'> {
+  value: number;
+  bind(spinner: SpinnerWidget): void;
+}
+
+export interface NumericSpinnerRecipe extends Omit<WidgetBase, 'type'> {
+  initialValue?: number;
   onValueChanged?: (to: number, from: number) => void;
 }
 
 export class NumericSpinnerImpl implements NumericSpinner {
-  constructor(desc: NumericSpinner) {
+  constructor(desc: NumericSpinnerRecipe) {
     this.x = desc.x;
     this.y = desc.y;
     this.height = desc.height;
     this.width = desc.width;
     this.name = desc.name;
-    this.value = desc.value ?? 0;
+    this.value = desc.initialValue ?? 0;
     this.onValueChanged = desc.onValueChanged;
   }
 
@@ -71,7 +76,7 @@ export class NumericSpinnerImpl implements NumericSpinner {
 }
 
 export default abstract class WidgetFactory {
-  static createNumericSpinner(desc: NumericSpinner): NumericSpinner {
+  static createNumericSpinner(desc: NumericSpinnerRecipe): NumericSpinner {
     return new NumericSpinnerImpl(desc);
   }
 }
