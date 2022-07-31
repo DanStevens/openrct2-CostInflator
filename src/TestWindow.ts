@@ -10,7 +10,7 @@ export default class TestWindow {
   open() {
     if (this.window == null) {
       this.window = this.ui.openWindow(this.windowDesc);
-      this.spinner = this.window.findWidget("Spinner");
+      this.spinner = this.window.findWidget("NumericSpinner");
     }
 
     this.window.bringToFront();
@@ -27,7 +27,8 @@ export default class TestWindow {
         x: 10,
         y: 20,
         height: 15,
-        width: 60
+        width: 60,
+        name: "NumericSpinner"
       })
     ]
   };

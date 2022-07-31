@@ -1,4 +1,5 @@
 export interface NumericSpinner extends Omit<WidgetBase, 'type'> {
+  value?: number;
 }
 
 export class NumericSpinnerImpl implements SpinnerWidget {
@@ -7,6 +8,8 @@ export class NumericSpinnerImpl implements SpinnerWidget {
     this.y = desc.y;
     this.height = desc.height;
     this.width = desc.width;
+    this.name = desc.name;
+    this.value = desc.value ?? 0;
   }
 
   readonly type = "spinner";

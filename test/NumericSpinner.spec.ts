@@ -17,13 +17,18 @@ describe("NumericSpinnerImpl", () => {
       x: 10,
       y: 20,
       width: 60,
-      height: 15
+      height: 15,
+      name: "NumericSpinner",
+      value: 7,
     };
     const objUT = new NumericSpinnerImpl(desc);
     expect(objUT.x).toBe(10);
     expect(objUT.y).toBe(20);
     expect(objUT.width).toBe(60);
     expect(objUT.height).toBe(15);
+    expect(objUT.name).toBe("NumericSpinner");
+    expect(objUT.value).toBe(7);
+    expect(objUT.text).toBe('7.00');
   });
 
   test("'type' property should be 'spinner'", () => {
