@@ -68,4 +68,73 @@ describe("NumericSpinnerImpl", () => {
     expect(objUT.value).toBe(-2);
     expect(objUT.text).toBe("-2.00");
   });
+
+  it("should invoked 'onValueChanged' callback when 'increment' method is called'", () => {
+    let wasInvoked = false;
+    let toArg: number | undefined;
+    let fromArg: number | undefined;
+
+    const objUT = new NumericSpinnerImpl({
+      x: 0,
+      y: 0,
+      height: 0,
+      width: 0,
+      value: 0,
+      onValueChanged: (to, from) => {
+        wasInvoked = true;
+        toArg = to;
+        fromArg = from;
+      }
+    });
+    objUT.increment();
+    expect(wasInvoked).toBe(true);
+    expect(toArg).toBe(1);
+    expect(fromArg).toBe(0);
+  });
+
+  it("should invoked 'onValueChanged' callback when 'decrement' method is called ", () => {
+    let wasInvoked = false;
+    let toArg: number | undefined;
+    let fromArg: number | undefined;
+
+    const objUT = new NumericSpinnerImpl({
+      x: 0,
+      y: 0,
+      height: 0,
+      width: 0,
+      value: 0,
+      onValueChanged: (to, from) => {
+        wasInvoked = true;
+        toArg = to;
+        fromArg = from;
+      }
+    });
+    objUT.decrement();
+    expect(wasInvoked).toBe(true);
+    expect(toArg).toBe(-1);
+    expect(fromArg).toBe(0);
+  });
+
+  it("should invoked 'onValueChanged' callback when 'value' property is set", () => {
+    let wasInvoked = false;
+    let toArg: number | undefined;
+    let fromArg: number | undefined;
+
+    const objUT = new NumericSpinnerImpl({
+      x: 0,
+      y: 0,
+      height: 0,
+      width: 0,
+      value: 3,
+      onValueChanged: (to, from) => {
+        wasInvoked = true;
+        toArg = to;
+        fromArg = from;
+      }
+    });
+    objUT.value = 7;
+    expect(wasInvoked).toBe(true);
+    expect(toArg).toBe(7);
+    expect(fromArg).toBe(3);
+  });
 });

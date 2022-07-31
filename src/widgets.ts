@@ -1,5 +1,6 @@
 export interface NumericSpinner extends Omit<WidgetBase, 'type'> {
   value?: number;
+  onValueChanged?: (to: number, from: number) => void;
 }
 
 export class NumericSpinnerImpl implements SpinnerWidget {
@@ -10,6 +11,7 @@ export class NumericSpinnerImpl implements SpinnerWidget {
     this.width = desc.width;
     this.name = desc.name;
     this.value = desc.value ?? 0;
+    this.onValueChanged = desc.onValueChanged;
   }
 
   readonly type = "spinner";
@@ -29,14 +31,17 @@ export class NumericSpinnerImpl implements SpinnerWidget {
   onIncrement?: (() => void) = () => this.increment();
   onDecrement?: (() => void) = () => this.decrement();
   onClick?: (() => void);
+  onValueChanged?: (to: number, from: number) => void;
 
   get value() {
     return this._value;
   }
 
-  set value(v) {
-    this._value = v;
+  set value(to) {
+    const from = this._value;
+    this._value = to;
     this.text = this._value.toFixed(2);
+    this.invokeValueChanged(to, from);
   }
 
   increment() {
@@ -45,6 +50,11 @@ export class NumericSpinnerImpl implements SpinnerWidget {
 
   decrement() {
     this.value -= 1;
+  }
+
+  private invokeValueChanged(to: number, from: number) {
+    if (typeof this.onValueChanged === 'function')
+      this.onValueChanged(to, from);
   }
 }
 
