@@ -204,61 +204,50 @@ describe("NumericSpinner", () => {
   });
 
   describe("onValueChanged property", () => {
-    it("should be invoked when 'increment' method is called'", () => {
-      let wasInvoked = false;
-      let toArg: number | undefined;
-      let fromArg: number | undefined;
+    interface OnValueChangedTestResults {
+      wasInvoked: boolean,
+      toArg?: number,
+      fromArg?: number
+    }
 
+    function createObjectsForOnValueChangedTest(initialValue: number = 0) {
+      const results: OnValueChangedTestResults = {
+        wasInvoked: false
+      };
+    
       const objUT = createObjUnderTest({
-        initialValue: 0,
+        initialValue,
         onValueChanged: (to, from) => {
-          wasInvoked = true;
-          toArg = to;
-          fromArg = from;
+          results.wasInvoked = true;
+          results.toArg = to;
+          results.fromArg = from;
         }
       });
+      return { objUT, results };
+    }
+
+    it("should be invoked when 'increment' method is called'", () => {
+      const { objUT, results } = createObjectsForOnValueChangedTest();
       objUT.increment();
-      expect(wasInvoked).toBe(true);
-      expect(toArg).toBe(1);
-      expect(fromArg).toBe(0);
+      expect(results.wasInvoked).toBe(true);
+      expect(results.toArg).toBe(1);
+      expect(results.fromArg).toBe(0);
     });
 
     it("should be invoked when 'decrement' method is called ", () => {
-      let wasInvoked = false;
-      let toArg: number | undefined;
-      let fromArg: number | undefined;
-
-      const objUT = createObjUnderTest({
-        initialValue: 0,
-        onValueChanged: (to, from) => {
-          wasInvoked = true;
-          toArg = to;
-          fromArg = from;
-        }
-      });
+      const { objUT, results } = createObjectsForOnValueChangedTest();
       objUT.decrement();
-      expect(wasInvoked).toBe(true);
-      expect(toArg).toBe(-1);
-      expect(fromArg).toBe(0);
+      expect(results.wasInvoked).toBe(true);
+      expect(results.toArg).toBe(-1);
+      expect(results.fromArg).toBe(0);
     });
 
     it("should be invoked when 'value' property is set", () => {
-      let wasInvoked = false;
-      let toArg: number | undefined;
-      let fromArg: number | undefined;
-
-      const objUT = createObjUnderTest({
-        initialValue: 3,
-        onValueChanged: (to, from) => {
-          wasInvoked = true;
-          toArg = to;
-          fromArg = from;
-        }
-      });
+      const { objUT, results } = createObjectsForOnValueChangedTest(3);
       objUT.value = 7;
-      expect(wasInvoked).toBe(true);
-      expect(toArg).toBe(7);
-      expect(fromArg).toBe(3);
+      expect(results.wasInvoked).toBe(true);
+      expect(results.toArg).toBe(7);
+      expect(results.fromArg).toBe(3);
     });
   });
 

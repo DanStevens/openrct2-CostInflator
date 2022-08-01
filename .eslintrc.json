@@ -43,7 +43,8 @@
     "@typescript-eslint/no-useless-constructor": ["error"],
     "no-return-assign": "off",
     "no-underscore-dangle": "off",
-    "max-classes-per-file": "off"
+    "max-classes-per-file": "off",
+    "object-curly-newline": "off"
   },
   "settings": {
     "import/resolver": {
