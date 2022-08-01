@@ -92,7 +92,7 @@ class NumericSpinnerImpl implements NumericSpinner {
     const from = this._value;
     this._value = to;
     if (this._boundSpinner) this._boundSpinner.text = this.toString();
-    this.invokeValueChanged(to, from);
+    if (to !== from) this.invokeValueChanged(to, from);
   }
 
   increment() {

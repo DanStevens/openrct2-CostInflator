@@ -210,13 +210,21 @@ describe("NumericSpinner", () => {
       fromArg?: number
     }
 
-    function createObjectsForOnValueChangedTest(initialValue: number = 0) {
+    function createObjectsForOnValueChangedTest(
+      initialValue: number = 0,
+      step: number = 1,
+      min: number | undefined = undefined,
+      max: number | undefined = undefined
+    ) {
       const results: OnValueChangedTestResults = {
         wasInvoked: false
       };
     
       const objUT = createObjUnderTest({
         initialValue,
+        step,
+        min,
+        max,
         onValueChanged: (to, from) => {
           results.wasInvoked = true;
           results.toArg = to;
@@ -248,6 +256,39 @@ describe("NumericSpinner", () => {
       expect(results.wasInvoked).toBe(true);
       expect(results.toArg).toBe(7);
       expect(results.fromArg).toBe(3);
+    });
+
+    it("should not be invoked when value it set to itself", () => {
+      const { objUT, results } = createObjectsForOnValueChangedTest(3);
+      expect(objUT.value).toBe(3);
+      objUT.value = 3;
+      expect(results.wasInvoked).toBe(false);
+    });
+
+    it("should not be invoked when increment is called and step is 0", () => {
+      const { objUT, results } = createObjectsForOnValueChangedTest(0, 0);
+      expect(objUT.step).toBe(0);
+      objUT.increment();
+      expect(results.wasInvoked).toBe(false);
+    });
+
+    it("should not be invoked when increment is called and value is equal to max", () => {
+      const { objUT, results } = createObjectsForOnValueChangedTest(1, 1, 0, 1);
+      objUT.increment();
+      expect(results.wasInvoked).toBe(false);
+    });
+
+    it("should not be invoked when decrement is called and step is 0", () => {
+      const { objUT, results } = createObjectsForOnValueChangedTest(0, 0);
+      expect(objUT.step).toBe(0);
+      objUT.decrement();
+      expect(results.wasInvoked).toBe(false);
+    });
+
+    it("should not be invoked when decrement is called and value is equal to min", () => {
+      const { objUT, results } = createObjectsForOnValueChangedTest(0, 1, 0, 1);
+      objUT.decrement();
+      expect(results.wasInvoked).toBe(false);
     });
   });
 
