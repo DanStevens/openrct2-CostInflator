@@ -10,7 +10,7 @@ function defaultNumericSpinner() : NumericSpinnerRecipe {
 }
 
 describe("NumericSpinner class", () => {
-  it("should implement SpinnerWidget", () => {
+  it("should implement SpinnerWidget interface", () => {
     widgets.createNumericSpinner(defaultNumericSpinner()) as SpinnerWidget;
   });
 
@@ -24,6 +24,7 @@ describe("NumericSpinner class", () => {
         name: "NumericSpinner",
         initialValue: 7,
         step: 0.01,
+        min: -16,
       };
       const objUT = widgets.createNumericSpinner(desc);
       expect(objUT.x).toBe(10);
@@ -34,6 +35,7 @@ describe("NumericSpinner class", () => {
       expect(objUT.value).toBe(7);
       expect(objUT.toString()).toBe('7.00');
       expect(objUT.step).toBe(0.01);
+      expect(objUT.min).toBe(-16);
     });
   });
 
@@ -71,6 +73,78 @@ describe("NumericSpinner class", () => {
       expect(objUT.value).toBe(2);
       expect(objUT.toString()).toBe("2.00");
     });
+
+    it("should not increase 'value' property when 'value' property is equal to 'max' property", () => {
+      const objUT = widgets.createNumericSpinner({
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        max: 1
+      });
+      expect(objUT.value).toBe(0);
+      expect(objUT.max).toBe(1);
+      objUT.increment();
+      expect(objUT.value).toBe(1);
+      objUT.increment();
+      expect(objUT.value).toBe(1);
+    });
+
+    it("should set 'value' to equal 'max' when incrementing 'value' by 'step' property would result in " +
+       "a value greater than 'max'", () => {
+      const objUT = widgets.createNumericSpinner({
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        max: 3,
+        step: 2
+      });
+      expect(objUT.value).toBe(0);
+      expect(objUT.max).toBe(3);
+      objUT.increment();
+      expect(objUT.value).toBe(2);
+      objUT.increment();
+      expect(objUT.value).toBe(3);
+    });
+
+    // Using a negative step inverts the behavior of increment
+    describe("combined with negative step", () => {
+      it("should not decrease 'value' property when 'value' property is equal to 'min' property", () => {
+        const objUT = widgets.createNumericSpinner({
+          x: 0,
+          y: 0,
+          width: 0,
+          height: 0,
+          step: -1,
+          min: -1
+        });
+        expect(objUT.value).toBe(0);
+        expect(objUT.min).toBe(-1);
+        objUT.increment();
+        expect(objUT.value).toBe(-1);
+        objUT.increment();
+        expect(objUT.value).toBe(-1);
+      });
+  
+      it("should set 'value' to equal 'min' when decrementing 'value' by 'step' property would result in " +
+         "a value less than 'min'", () => {
+        const objUT = widgets.createNumericSpinner({
+          x: 0,
+          y: 0,
+          width: 0,
+          height: 0,
+          min: -3,
+          step: -2
+        });
+        expect(objUT.value).toBe(0);
+        expect(objUT.min).toBe(-3);
+        objUT.increment();
+        expect(objUT.value).toBe(-2);
+        objUT.increment();
+        expect(objUT.value).toBe(-3);
+      });
+    });
   });
 
   describe("decrement method", () => {
@@ -84,6 +158,77 @@ describe("NumericSpinner class", () => {
       objUT.decrement();
       expect(objUT.value).toBe(-2);
       expect(objUT.toString()).toBe("-2.00");
+    });
+
+    it("should not decrease 'value' property when 'value' property is equal to 'min' property", () => {
+      const objUT = widgets.createNumericSpinner({
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        min: -1
+      });
+      expect(objUT.value).toBe(0);
+      expect(objUT.min).toBe(-1);
+      objUT.decrement();
+      expect(objUT.value).toBe(-1);
+      objUT.decrement();
+      expect(objUT.value).toBe(-1);
+    });
+
+    it("should set 'value' to equal 'min' when decrementing 'value' by 'step' property would result in " +
+       "a value less than 'min'", () => {
+      const objUT = widgets.createNumericSpinner({
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        min: -3,
+        step: 2
+      });
+      expect(objUT.value).toBe(0);
+      expect(objUT.min).toBe(-3);
+      objUT.decrement();
+      expect(objUT.value).toBe(-2);
+      objUT.decrement();
+      expect(objUT.value).toBe(-3);
+    });
+
+    describe("combined with negative step", () => {
+      it("should not increase 'value' property when 'value' property is equal to 'max' property", () => {
+        const objUT = widgets.createNumericSpinner({
+          x: 0,
+          y: 0,
+          width: 0,
+          height: 0,
+          max: 1,
+          step: -1
+        });
+        expect(objUT.value).toBe(0);
+        expect(objUT.max).toBe(1);
+        objUT.decrement();
+        expect(objUT.value).toBe(1);
+        objUT.decrement();
+        expect(objUT.value).toBe(1);
+      });
+  
+      it("should set 'value' to equal 'max' when incrementing 'value' by 'step' property would result in " +
+         "a value greater than 'max'", () => {
+        const objUT = widgets.createNumericSpinner({
+          x: 0,
+          y: 0,
+          width: 0,
+          height: 0,
+          max: 3,
+          step: -2
+        });
+        expect(objUT.value).toBe(0);
+        expect(objUT.max).toBe(3);
+        objUT.decrement();
+        expect(objUT.value).toBe(2);
+        objUT.decrement();
+        expect(objUT.value).toBe(3);
+      });
     });
   });
 

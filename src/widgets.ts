@@ -1,3 +1,5 @@
+import { clamp } from './utils';
+
 /**
  * The NumericSpinner widget is a SpinnerWidget that handles numbers for you
  */
@@ -6,6 +8,10 @@ export interface NumericSpinner extends Omit<SpinnerWidget, 'text'> {
   value: number;
   /** Get or set the value  to increment or decrement the value by */
   step: number;
+  /** Get or set the minimum value allowed */
+  min?: number;
+  /** Get or set the maximum value allowed */
+  max?: number;
   /**
    * Bind the NumericSpinner widget to the given OpenRCT2 SpinnerWidget, such that
    * when the value changes, the text of the SpinnerWidget is updated
@@ -32,8 +38,12 @@ export interface NumericSpinnerRecipe extends Omit<WidgetBase, 'type'> {
    * or when the increment/decrement spinner buttons are clicked by the user
    */
   onValueChanged?: (to: number, from: number) => void;
-  /** Optional value to increment or decrement the value by. Default is 1 */
+  /** Optional value to increment or decrement the value by. Defaults to 1 */
   step?: number
+  /** Optional minimum allowed value */
+  min?: number
+  /** Optional maximum allowed value */
+  max?: number
 }
 
 class NumericSpinnerImpl implements NumericSpinner {
@@ -46,6 +56,8 @@ class NumericSpinnerImpl implements NumericSpinner {
     this.value = recipe.initialValue ?? 0;
     this.onValueChanged = recipe.onValueChanged;
     this.step = recipe.step ?? 1;
+    this.min = recipe.min;
+    this.max = recipe.max;
   }
 
   readonly type = "spinner";
@@ -55,6 +67,8 @@ class NumericSpinnerImpl implements NumericSpinner {
   public height: number;
   public name?: string;
   public step: number;
+  public min?: number;
+  public max?: number;
 
   private _value: number = 0;
   private _boundSpinner?: SpinnerWidget;
@@ -82,11 +96,11 @@ class NumericSpinnerImpl implements NumericSpinner {
   }
 
   increment() {
-    this.value += this.step;
+    this.value = clamp(this.value + this.step, this.min, this.max);
   }
 
   decrement() {
-    this.value -= this.step;
+    this.value = clamp(this.value - this.step, this.min, this.max);
   }
 
   bind(spinner: SpinnerWidget) {
