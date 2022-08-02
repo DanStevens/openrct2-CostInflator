@@ -295,7 +295,7 @@ describe("NumericSpinner", () => {
   describe('bind method', () => {
     it("can be used to bind an OpenRCT2 'SpinnerWidget' to the NumericSpinner, " +
        "such that changing its value updates the text of the SpinnerWidget", () => {
-      const objUT = createObjUnderTest();
+      const objUT = createObjUnderTest({ initialValue: 1 });
       const spinnerWidget = {
         x: 0,
         y: 0,
@@ -304,6 +304,7 @@ describe("NumericSpinner", () => {
       } as SpinnerWidget;
       expect(spinnerWidget.text).toBeUndefined();
       objUT.bind(spinnerWidget);
+      expect(spinnerWidget.text).toBe('1.00');
       objUT.value = 7;
       expect(spinnerWidget.text).toBe('7.00');
     });

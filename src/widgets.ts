@@ -91,8 +91,13 @@ class NumericSpinnerImpl implements NumericSpinner {
   set value(to) {
     const from = this._value;
     this._value = to;
-    if (this._boundSpinner) this._boundSpinner.text = this.toString();
+    this.syncBoundSpinner();
     if (to !== from) this.invokeValueChanged(to, from);
+  }
+
+  private syncBoundSpinner() {
+    if (this._boundSpinner)
+      this._boundSpinner.text = this.toString();
   }
 
   increment() {
@@ -105,6 +110,7 @@ class NumericSpinnerImpl implements NumericSpinner {
 
   bind(spinner: SpinnerWidget) {
     this._boundSpinner = spinner;
+    this.syncBoundSpinner();
   }
 
   toString() {
