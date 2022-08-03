@@ -36,7 +36,7 @@ describe("NumericSpinner", () => {
       expect(objUT.height).toBe(15);
       expect(objUT.name).toBe("NumericSpinner");
       expect(objUT.value).toBe(7);
-      expect(objUT.toString()).toBe('7.00');
+      expect(objUT.toString()).toBe('7');
       expect(objUT.step).toBe(0.01);
       expect(objUT.min).toBe(-16);
     });
@@ -57,10 +57,31 @@ describe("NumericSpinner", () => {
   });
 
   describe("toString method", () => {
-    it("should return 'value' property formatted to 2 decimal places", () => {
+    it("should return 'value' property formatted to whole number by default", () => {
       const objUT = createObjUnderTest();
       objUT.value = 12.3456;
-      expect(objUT.toString()).toBe("12.35");
+      expect(objUT.toString()).toBe("12");
+    });
+  });
+
+  describe("formatValue property", () => {
+    describe("can be used to control how value property is converted to a string (via toString)", () => {
+      test.each([
+        [0, 'with default format', undefined, '0'],
+        [1, 'with default format', undefined, '1'],
+        [12.34, 'formatted to 2 decimal places', (v: number) => v.toFixed(2), '12.34'],
+        [0.25, 'formatted as a percentage', (v: number) => `${(v * 100).toFixed(0)}%`, '25%'],
+        [35, 'formatted as money', (v: number) => `$${(v / 10).toFixed(2)}`, '$3.50']
+      ])(
+        'Value of %f %s',
+        (value: number, formatDesc: string, format: ((v: number) => string) | undefined, expected: string) => {
+          const objUT = createObjUnderTest({
+            initialValue: value,
+            formatValue: format
+          });
+          expect(objUT.toString()).toBe(expected);
+        }
+      );
     });
   });
 
@@ -71,10 +92,10 @@ describe("NumericSpinner", () => {
       expect(objUT.value).toBe(0);
       objUT.increment();
       expect(objUT.value).toBe(1);
-      expect(objUT.toString()).toBe("1.00");
+      expect(objUT.toString()).toBe("1");
       objUT.increment();
       expect(objUT.value).toBe(2);
-      expect(objUT.toString()).toBe("2.00");
+      expect(objUT.toString()).toBe("2");
     });
 
     it("should not increase 'value' property when 'value' property is equal to 'max' property", () => {
@@ -141,10 +162,10 @@ describe("NumericSpinner", () => {
       expect(objUT.value).toBe(0);
       objUT.decrement();
       expect(objUT.value).toBe(-1);
-      expect(objUT.toString()).toBe("-1.00");
+      expect(objUT.toString()).toBe("-1");
       objUT.decrement();
       expect(objUT.value).toBe(-2);
-      expect(objUT.toString()).toBe("-2.00");
+      expect(objUT.toString()).toBe("-2");
     });
 
     it("should not decrease 'value' property when 'value' property is equal to 'min' property", () => {
@@ -304,9 +325,9 @@ describe("NumericSpinner", () => {
       } as SpinnerWidget;
       expect(spinnerWidget.text).toBeUndefined();
       objUT.bind(spinnerWidget);
-      expect(spinnerWidget.text).toBe('1.00');
+      expect(spinnerWidget.text).toBe('1');
       objUT.value = 7;
-      expect(spinnerWidget.text).toBe('7.00');
+      expect(spinnerWidget.text).toBe('7');
     });
   });
 

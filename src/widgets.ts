@@ -44,6 +44,8 @@ export interface NumericSpinnerRecipe extends Omit<WidgetBase, 'type'> {
   min?: number
   /** Optional maximum allowed value */
   max?: number
+  /** Option function for converting the value to a string. Defaults to `v => v.toFixed(0)` */
+  formatValue?: (v: number) => string;
 }
 
 class NumericSpinnerImpl implements NumericSpinner {
@@ -58,6 +60,7 @@ class NumericSpinnerImpl implements NumericSpinner {
     this.step = recipe.step ?? 1;
     this.min = recipe.min;
     this.max = recipe.max;
+    this.formatValue = recipe.formatValue;
   }
 
   readonly type = "spinner";
@@ -69,6 +72,7 @@ class NumericSpinnerImpl implements NumericSpinner {
   public step: number;
   public min?: number;
   public max?: number;
+  public formatValue?: (v: number) => string;
 
   private _value: number = 0;
   private _boundSpinner?: SpinnerWidget;
@@ -114,7 +118,7 @@ class NumericSpinnerImpl implements NumericSpinner {
   }
 
   toString() {
-    return this._value.toFixed(2);
+    return this.formatValue ? this.formatValue(this.value) : this.value.toFixed(0);
   }
 
   private invokeValueChanged(to: number, from: number) {
