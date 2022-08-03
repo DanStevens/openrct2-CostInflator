@@ -4,8 +4,8 @@ import settings from "./settings";
 function calcUpkeep(ride: Ride, multiplier: number) {
   if (ride.runningCost > 0) {
     const newUpkeep = +(ride.runningCost * multiplier).toFixed(2);
-    console.log(`Setting upkeep of ride ${ride.id} to ` +
-      `${ride.runningCost} * ${settings.rideUpkeepMultiplier.toFixed(2)} = ${newUpkeep}`);
+    console.log(`Setting upkeep of ${ride.classification} ${ride.id} to ` +
+      `${ride.runningCost} * ${multiplier.toFixed(2)} = ${newUpkeep}`);
     return newUpkeep;
   }
 
@@ -13,11 +13,23 @@ function calcUpkeep(ride: Ride, multiplier: number) {
   return ride.runningCost;
 }
 
+function getMultiplierForRideClassification(classification: RideClassification): number {
+  switch (classification) {
+    case "ride":
+      return settings.rideUpkeepMultiplier;
+    case "stall":
+    case "facility":
+      return settings.stallUpkeepMultiplier;
+    default:
+      return 1.0;
+  }
+}
+
 export function handleUpkeepCalculate(e: RideRatingsCalculateArgs): void {
   if (settings.enabled) {
     const ride = map.getRide(e.rideId);
-    if (ride.classification === "ride")
-      ride.runningCost = calcUpkeep(ride, settings.rideUpkeepMultiplier);
+    const multiplier = getMultiplierForRideClassification(ride.classification);
+    ride.runningCost = calcUpkeep(ride, multiplier);
   } else {
     console.log("Cost Inflator is disabled");
   }

@@ -61,6 +61,9 @@ class NumericSpinnerImpl implements NumericSpinner {
     this.min = recipe.min;
     this.max = recipe.max;
     this.formatValue = recipe.formatValue;
+    this.tooltip = recipe.tooltip;
+    this.isDisabled = recipe.isDisabled;
+    this.isVisible = recipe.isVisible;
   }
 
   readonly type = "spinner";

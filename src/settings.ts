@@ -5,10 +5,13 @@ class SettingsImpl implements Settings {
     if (source) {
       this.enabled = source.enabled;
       this.rideUpkeepMultiplier = source.rideUpkeepMultiplier;
+      this.stallUpkeepMultiplier = source.stallUpkeepMultiplier;
     }
   }
   public enabled = true;
   public rideUpkeepMultiplier = 1.0;
+  public stallUpkeepMultiplier = 1.0;
+
   public save() {
     parkStorage.set("settings", this);
   }
@@ -16,6 +19,7 @@ class SettingsImpl implements Settings {
 
 function load(): Settings {
   const settings = new SettingsImpl(parkStorage.get("settings", new SettingsImpl()));
+  console.log('loaded settings', settings);
   settings.save();
   return settings;
 }

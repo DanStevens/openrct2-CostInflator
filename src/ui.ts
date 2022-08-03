@@ -21,6 +21,25 @@ export class SettingsWindow {
       this.settings.rideUpkeepMultiplier = to;
       this.settings.save();
     },
+    tooltip: "Multiplier for running costs (upkeep) of rides"
+  });
+
+  private stallUpkeepMultiplierSpinner = widgets.createNumericSpinner({
+    name: "StallUpkeepMultiplierSpinner",
+    x: 80,
+    y: 108,
+    width: 70,
+    height: 15,
+    initialValue: this.settings.stallUpkeepMultiplier,
+    formatValue: v => v.toFixed(2),
+    min: 0,
+    max: 99.99,
+    step: 0.01,
+    onValueChanged: to => {
+      this.settings.stallUpkeepMultiplier = to;
+      this.settings.save();
+    },
+    tooltip: "Multiplier for running costs (upkeep) of stalls and facilities"
   });
   
   private enabledCheckbox?: CheckboxWidget;
@@ -29,6 +48,7 @@ export class SettingsWindow {
     if (this.window == null) {
       this.window = this.ui.openWindow(this.windowDesc);
       this.rideUpkeepMultiplierSpinner.bind(this.window.findWidget(this.rideUpkeepMultiplierSpinner.name!));
+      this.stallUpkeepMultiplierSpinner.bind(this.window.findWidget(this.stallUpkeepMultiplierSpinner.name!));
       this.enabledCheckbox = this.window.findWidget("EnabledCheckbox");
       this.enabledCheckbox.isChecked = this.settings.enabled;
     }
@@ -40,7 +60,7 @@ export class SettingsWindow {
     classification: "CostInflatorSettingsWindow",
     title: "Cost Inflator",
     width: 200,
-    height: 90,
+    height: 140,
     onClose: () => this.window = undefined,
     widgets: [
       {
@@ -56,7 +76,9 @@ export class SettingsWindow {
           this.settings.enabled = isChecked;
           this.settings.save();
         },
+        tooltip: "Enables the plugin globally for the current park"
       },
+
       {
         name: "RideRunningCostsGroupbox",
         type: "groupbox",
@@ -75,7 +97,27 @@ export class SettingsWindow {
         height: 15,
         text: "Multiplier",
       },
-      this.rideUpkeepMultiplierSpinner
+      this.rideUpkeepMultiplierSpinner,
+
+      {
+        name: "StallRunningCostsGroupbox",
+        type: "groupbox",
+        x: 5,
+        y: 90,
+        width: 190,
+        height: 45,
+        text: "Stall Running Costs",
+      },
+      {
+        name: "MultiplierLabel",
+        type: "label",
+        x: 15,
+        y: 110,
+        width: 60,
+        height: 15,
+        text: "Multiplier",
+      },
+      this.stallUpkeepMultiplierSpinner,
     ]
   };
 }
