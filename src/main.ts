@@ -1,8 +1,15 @@
-import TestWindow from "./TestWindow";
+import settings from "./settings";
+import { SettingsWindow } from "./ui";
+import { handleUpkeepCalculate } from "./handlers";
 
-export default function main() {
-  console.log('CostInflator plug-in has started');
+const main = (): void => {
+  const settingsWindow = new SettingsWindow(ui, settings);
+  ui.registerMenuItem("Cost Inflator", () => settingsWindow.open());
 
-  const testWindow = new TestWindow(ui);
-  ui.registerMenuItem("Test Window", () => testWindow.open());
-}
+  if (settings.enabled) {
+    console.log('Ride upkeep will be multiplied by', settings.rideUpkeepMultiplier);
+    context.subscribe('ride.ratings.calculate', handleUpkeepCalculate);
+  }
+};
+
+export default main;
