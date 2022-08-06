@@ -1,4 +1,4 @@
-import { clampMin, clampMax, clamp } from '../src/utils';
+import { clampMin, clampMax, clamp, last } from '../src/utils';
 
 describe("clampMin function", () => {
   test.each([
@@ -96,5 +96,27 @@ describe("clamp function", () => {
 
   it("should throw if min arg is greater than max arg", () => {
     expect(() => clamp(0, 1, 0)).toThrow('Invalid args: min must be less than or equal to max');
+  });
+});
+
+describe("last method", () => {
+  it("returns undefined when given empty array", () => {
+    const emptyArray: unknown[] = [];
+    expect(last(emptyArray)).toBeUndefined();
+  });
+
+  it("returns the element when given array of one item", () => {
+    const oneItemArray = [1];
+    expect(last(oneItemArray)).toBe(1);
+  });
+
+  it("returns the second item when given a two item array", () => {
+    const twoItemArray = [1, 2];
+    expect(last(twoItemArray)).toBe(2);
+  });
+
+  it("returns the third item when given a three item array", () => {
+    const twoItemArray = [1, 2, 3];
+    expect(last(twoItemArray)).toBe(3);
   });
 });

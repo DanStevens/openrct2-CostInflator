@@ -41,3 +41,7 @@ export function clamp(value: number, min: number | null | undefined, max: number
 
   return clampMax(clampMin(value, min), max);
 }
+
+export function last<T>(array: T[]) {
+  return array[array.length - 1];
+}
