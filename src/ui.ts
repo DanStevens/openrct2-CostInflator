@@ -121,3 +121,7 @@ export class SettingsWindow {
     ]
   };
 }
+
+export function showTextInput(desc: TextInputDesc) {
+  return ui.showTextInput(desc);
+}

@@ -1,4 +1,5 @@
 import { clamp } from './utils';
+import { showTextInput } from './ui';
 
 /**
  * The NumericSpinner widget is a SpinnerWidget that handles numbers for you
@@ -44,8 +45,13 @@ export interface NumericSpinnerRecipe extends Omit<WidgetBase, 'type'> {
   min?: number
   /** Optional maximum allowed value */
   max?: number
-  /** Option function for converting the value to a string. Defaults to `v => v.toFixed(0)` */
+  /** Optional function for converting the value to a string. Defaults to `v => v.toFixed(0)` */
   formatValue?: (v: number) => string;
+  /**
+   * Optional handler for when the widget is clicked. By default it displays a
+   * text input dialog for user to type in a value.
+   */
+  onClick?: () => void;
 }
 
 class NumericSpinnerImpl implements NumericSpinner {
@@ -64,6 +70,7 @@ class NumericSpinnerImpl implements NumericSpinner {
     this.tooltip = recipe.tooltip;
     this.isDisabled = recipe.isDisabled;
     this.isVisible = recipe.isVisible;
+    this.onClick = recipe.onClick ?? this.defaultOnClickHandler.bind(this);
   }
 
   readonly type = "spinner";
@@ -88,7 +95,7 @@ class NumericSpinnerImpl implements NumericSpinner {
 
   onIncrement?: (() => void) = () => this.increment();
   onDecrement?: (() => void) = () => this.decrement();
-  onClick?: (() => void);
+  onClick: (() => void);
   onValueChanged?: (to: number, from: number) => void;
 
   get value() {
@@ -127,6 +134,19 @@ class NumericSpinnerImpl implements NumericSpinner {
   private invokeValueChanged(to: number, from: number) {
     if (typeof this.onValueChanged === 'function')
       this.onValueChanged(to, from);
+  }
+
+  private defaultOnClickHandler() {
+    const valueAsString = this._value.toString();
+    showTextInput({
+      title: "Enter new value",
+      description: "Enter new value",
+      initialValue: valueAsString,
+      callback: value => {
+        const num = +value;
+        if (Number.isFinite(num)) this.value = +value;
+      }
+    });
   }
 }
 
