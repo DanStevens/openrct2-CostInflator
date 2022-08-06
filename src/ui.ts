@@ -1,17 +1,25 @@
 import widgets from "./widgets";
 
+const standardControlHeight = 15;
+const standardMargin = 5;
+
 /* eslint-disable import/prefer-default-export */
 export class SettingsWindow {
   constructor(private ui: Ui, public settings: Settings) {}
+
+  private static readonly windowWidth = 200;
+  private static readonly windowHeight = 180;
+  private static readonly xStops = [5, 10, 15, 80, 130];
+  private static readonly yStops = [20, 40, 58, 60, 110, 128, 130, 78, 80];
 
   private window?: Window;
 
   private rideUpkeepMultiplierSpinner = widgets.createNumericSpinner({
     name: "RideUpkeepMultiplierSpinner",
-    x: 80,
-    y: 58,
-    width: 70,
-    height: 15,
+    x: SettingsWindow.xStops[3],
+    y: SettingsWindow.yStops[2],
+    width: SettingsWindow.xStops[4] - SettingsWindow.yStops[3],
+    height: standardControlHeight,
     initialValue: this.settings.rideUpkeepMultiplier,
     formatValue: v => v.toFixed(2),
     min: 0,
@@ -26,10 +34,10 @@ export class SettingsWindow {
 
   private stallUpkeepMultiplierSpinner = widgets.createNumericSpinner({
     name: "StallUpkeepMultiplierSpinner",
-    x: 80,
-    y: 108,
-    width: 70,
-    height: 15,
+    x: SettingsWindow.xStops[3],
+    y: SettingsWindow.yStops[5],
+    width: SettingsWindow.xStops[4] - SettingsWindow.yStops[3],
+    height: standardControlHeight,
     initialValue: this.settings.stallUpkeepMultiplier,
     formatValue: v => v.toFixed(2),
     min: 0,
@@ -59,17 +67,17 @@ export class SettingsWindow {
   private readonly windowDesc: WindowDesc = {
     classification: "CostInflatorSettingsWindow",
     title: "Cost Inflator",
-    width: 200,
-    height: 140,
+    width: SettingsWindow.windowWidth,
+    height: SettingsWindow.windowHeight,
     onClose: () => this.window = undefined,
     widgets: [
       {
         name: "EnabledCheckbox",
         type: "checkbox",
-        x: 10,
-        y: 20,
-        width: 60,
-        height: 15,
+        x: SettingsWindow.xStops[1],
+        y: SettingsWindow.yStops[0],
+        width: SettingsWindow.xStops[3] - SettingsWindow.xStops[2],
+        height: standardControlHeight,
         text: "Enabled",
         isChecked: this.settings.enabled,
         onChange: (isChecked) => {
@@ -82,19 +90,19 @@ export class SettingsWindow {
       {
         name: "RideRunningCostsGroupbox",
         type: "groupbox",
-        x: 5,
-        y: 40,
-        width: 190,
-        height: 45,
+        x: SettingsWindow.xStops[0],
+        y: SettingsWindow.yStops[1],
+        width: SettingsWindow.windowWidth - (standardMargin * 2),
+        height: SettingsWindow.yStops[4] - SettingsWindow.yStops[1] - standardMargin,
         text: "Ride Running Costs",
       },
       {
-        name: "MultiplierLabel",
+        name: "RideRunningCostsMultiplierLabel",
         type: "label",
-        x: 15,
-        y: 60,
-        width: 60,
-        height: 15,
+        x: SettingsWindow.xStops[2],
+        y: SettingsWindow.yStops[3],
+        width: SettingsWindow.xStops[3] - SettingsWindow.xStops[2],
+        height: standardControlHeight,
         text: "Multiplier",
       },
       this.rideUpkeepMultiplierSpinner,
@@ -102,26 +110,22 @@ export class SettingsWindow {
       {
         name: "StallRunningCostsGroupbox",
         type: "groupbox",
-        x: 5,
-        y: 90,
-        width: 190,
-        height: 45,
+        x: SettingsWindow.xStops[0],
+        y: SettingsWindow.yStops[4],
+        width: SettingsWindow.windowWidth - (standardMargin * 2),
+        height: SettingsWindow.yStops[6] - SettingsWindow.yStops[3] - standardMargin,
         text: "Stall Running Costs",
       },
       {
-        name: "MultiplierLabel",
+        name: "StallRunningCostsMultiplierLabel",
         type: "label",
-        x: 15,
-        y: 110,
-        width: 60,
-        height: 15,
+        x: SettingsWindow.xStops[2],
+        y: SettingsWindow.yStops[6],
+        width: SettingsWindow.xStops[3] - SettingsWindow.xStops[2],
+        height: standardControlHeight,
         text: "Multiplier",
       },
       this.stallUpkeepMultiplierSpinner,
     ]
   };
-}
-
-export function showTextInput(desc: TextInputDesc) {
-  return ui.showTextInput(desc);
 }

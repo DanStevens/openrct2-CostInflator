@@ -1,5 +1,4 @@
 import { clamp } from './utils';
-import { showTextInput } from './ui';
 
 /**
  * The NumericSpinner widget is a SpinnerWidget that handles numbers for you
@@ -138,7 +137,7 @@ class NumericSpinnerImpl implements NumericSpinner {
 
   private defaultOnClickHandler() {
     const valueAsString = this._value.toString();
-    showTextInput({
+    ui.showTextInput({
       title: "Enter new value",
       description: "Enter new value",
       initialValue: valueAsString,
