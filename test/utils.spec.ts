@@ -1,4 +1,4 @@
-import { clampMin, clampMax, clamp, last } from '../src/utils';
+import { clampMin, clampMax, clamp, last, countDecimals } from '../src/utils';
 
 describe("clampMin function", () => {
   test.each([
@@ -99,7 +99,7 @@ describe("clamp function", () => {
   });
 });
 
-describe("last method", () => {
+describe("last function", () => {
   it("returns undefined when given empty array", () => {
     const emptyArray: unknown[] = [];
     expect(last(emptyArray)).toBeUndefined();
@@ -118,5 +118,55 @@ describe("last method", () => {
   it("returns the third item when given a three item array", () => {
     const twoItemArray = [1, 2, 3];
     expect(last(twoItemArray)).toBe(3);
+  });
+});
+
+describe("countDecimals function", () => {
+  test.each([
+    [0, 0],
+    [1, 0],
+    [-1, 0],
+    [0.0, 0],
+    [0.1, 1],
+    [-0.1, 1],
+    [0.2, 1],
+    [0.23, 2],
+    [0.01, 2],
+    [0.001, 3],
+    [1e-8, 8],
+    [-1e-8, 8],
+    [1e8, 0],
+    [1.1, 1],
+    [3456.78, 2]
+  ])("given number '%i', should return %i", (num: number, expected: number) => {
+    expect(countDecimals(num)).toBe(expected);
+  });
+
+  test.each([
+    ["0", 0],
+    ["1", 0],
+    ["-1", 0],
+    ["0.0", 0],
+    ["0.1", 1],
+    ["-0.1", 1],
+    ["0.2", 1],
+    ["0.23", 2],
+    ["0.01", 2],
+    ["0.001", 3],
+    ["1e-8", 8],
+    ["-1e-8", 8],
+    ["1e8", 0],
+    ["000", 0],
+    ["100", 0],
+    ["-100", 0],
+    ["0.000", 0],
+    ["0.100", 1],
+    ["-0.100", 1],
+    ["0.200", 1],
+    ["0.2300", 2],
+    ["0.0100", 2],
+    ["0.00100", 3],
+  ])("given string '%s', should return %s", (str: string, expected: number) => {
+    expect(countDecimals(+str)).toBe(expected);
   });
 });

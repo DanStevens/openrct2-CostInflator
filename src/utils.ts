@@ -42,6 +42,39 @@ export function clamp(value: number, min: number | null | undefined, max: number
   return clampMax(clampMin(value, min), max);
 }
 
-export function last<T>(array: T[]) {
+/**
+ * Returns the last element of an array
+ * @param array The array from which to return the last element
+ * @returns The last element of the array, or `undefined` if the array is empty
+ */
+export function last<T>(array: T[]): T | undefined {
   return array[array.length - 1];
+}
+
+/**
+ * Returns the number of decimal places in a number
+ * @param num
+ * @returns number of decimals places
+ * @example countDecimals(1) => 0
+ * @example countDecimals(1.0) => 0
+ * @example countDecimals(1.1) => 1
+ * @example countDecimals(0.01) => 2
+ * @example countDecimals(3456.78) => 2
+ */
+// https://stackoverflow.com/a/64876394/660896
+export function countDecimals(num: number) {
+  if (Number.isInteger(num) === true) {
+    return 0;
+  }
+
+  const text = num.toString(); // Convert back to string and check for "1e-8" numbers
+
+  if (text.indexOf('e-') > -1) {
+    const [, trail] = text.split('e-');
+    const deg = parseInt(trail, 10);
+    return deg;
+  }
+
+  const index = text.indexOf(".");
+  return text.length - index - 1; // Otherwise use simple string function to count
 }
