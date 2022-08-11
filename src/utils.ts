@@ -78,3 +78,14 @@ export function countDecimals(num: number) {
   const index = text.indexOf(".");
   return text.length - index - 1; // Otherwise use simple string function to count
 }
+
+/**
+ * Rounds a number to the given multiple
+ * @param num The number to round
+ * @param multiple The multiple to round by
+ * @returns num rounded according to the given multiple
+ */
+// https://stackoverflow.com/a/10728943/660896
+export function roundMultiple(num: number, multiple: number) {
+  return Math.round(num / multiple) * multiple;
+}

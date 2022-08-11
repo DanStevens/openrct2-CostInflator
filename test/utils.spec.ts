@@ -1,4 +1,4 @@
-import { clampMin, clampMax, clamp, last, countDecimals } from '../src/utils';
+import { clampMin, clampMax, clamp, last, countDecimals, roundMultiple } from '../src/utils';
 
 describe("clampMin function", () => {
   test.each([
@@ -11,7 +11,7 @@ describe("clampMin function", () => {
     [-1, -1, -1],
     [-2, -1, -1],
     [0, -1, 0],
-  ])('given value of %i and min of %i should return %i', (value, min, expected) => {
+  ])('given value of %d and min of %d should return %d', (value, min, expected) => {
     expect(clampMin(value, min)).toBe(expected);
   });
 
@@ -35,7 +35,7 @@ describe("clampMax function", () => {
     [-1, -1, -1],
     [-2, -1, -2],
     [0, -1, -1]
-  ])('given value of %i and max of %i should return %i', (value, min, expected) => {
+  ])('given value of %d and max of %d should return %d', (value, min, expected) => {
     expect(clampMax(value, min)).toBe(expected);
   });
 
@@ -60,7 +60,7 @@ describe("clamp function", () => {
     [0.01, 0.01, 0.02, 0.01],
     [0.00, 0.01, 0.02, 0.01],
     [0.03, 0.01, 0.02, 0.02],
-  ])('given value of %i, min of %i and max of %i should return %i', (value, min, max, expected) => {
+  ])('given value of %d, min of %d and max of %d should return %d', (value, min, max, expected) => {
     expect(clamp(value, min, max)).toBe(expected);
   });
 
@@ -74,7 +74,7 @@ describe("clamp function", () => {
     [-1, -1, -1],
     [-2, -1, -1],
     [0, -1, 0],
-  ])('given value of %i, min of %i and max of undefined or null should return %i', (value, min, expected) => {
+  ])('given value of %d, min of %d and max of undefined or null should return %d', (value, min, expected) => {
     expect(clamp(value, min, undefined)).toBe(expected);
     expect(clamp(value, min, null)).toBe(expected);
   });
@@ -89,7 +89,7 @@ describe("clamp function", () => {
     [-1, -1, -1],
     [-2, -1, -2],
     [0, -1, -1]
-  ])('given value of %i, min of undefined or null and max of %i should return %i', (value, max, expected) => {
+  ])('given value of %d, min of undefined or null and max of %d should return %d', (value, max, expected) => {
     expect(clamp(value, undefined, max)).toBe(expected);
     expect(clamp(value, null, max)).toBe(expected);
   });
@@ -138,7 +138,7 @@ describe("countDecimals function", () => {
     [1e8, 0],
     [1.1, 1],
     [3456.78, 2]
-  ])("given number '%i', should return %i", (num: number, expected: number) => {
+  ])("given num %d, should return %d", (num: number, expected: number) => {
     expect(countDecimals(num)).toBe(expected);
   });
 
@@ -166,7 +166,41 @@ describe("countDecimals function", () => {
     ["0.2300", 2],
     ["0.0100", 2],
     ["0.00100", 3],
-  ])("given string '%s', should return %s", (str: string, expected: number) => {
+  ])("given str '%s', should return %d", (str: string, expected: number) => {
     expect(countDecimals(+str)).toBe(expected);
+  });
+});
+
+describe("roundMultiple function", () => {
+  test.each([
+    [0, 1, 0],
+    [1, 1, 1],
+    [10, 1, 10],
+    [123, 1, 123],
+    [0, 0.1, 0.0],
+    [1, 0.1, 1.0],
+    [1.1, 0.1, 1.1],
+    [1.23, 0.1, 1.2],
+    [1.23, 0.01, 1.23],
+    [1.1, 0.01, 1.10],
+    [1.001, 0.01, 1.00],
+    [1.999, 0.01, 2.00],
+    [1.99, 0.01, 1.99],
+    [-0, 1, -0],
+    [-1, 1, -1],
+    [-10, 1, -10],
+    [-0, 0.1, -0],
+    [-1, 0.1, -1.0],
+    [-1.1, 0.1, -1.1],
+    [-1.23, 0.1, -1.2],
+    [-1.23, 0.01, -1.23],
+    [-1.1, 0.01, -1.1],
+    [-0.001, 0.01, -0],
+  ])("given num %d and multiple %d should return %d", (num, multiple, expected) => {
+    expect(roundMultiple(num, multiple)).toBeCloseTo(expected);
+  });
+
+  test("given num 1 and multiple 0 should return NaN", () => {
+    expect(roundMultiple(1, 0)).toBeNaN();
   });
 });
