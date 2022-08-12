@@ -79,10 +79,9 @@ export class SettingsWindow {
       this.stallUpkeepMultiplierSpinner.bind(this.window.findWidget(this.stallUpkeepMultiplierSpinner.name!));
       this.enabledCheckbox = this.window.findWidget("EnabledCheckbox");
       this.enabledCheckbox.isChecked = this.settings.enabled;
-
-      this.rideUpkeepMultiplierSpinner.value = this.settings.rideUpkeepMultiplier;
-      this.rideUpkeepInflationSpinner.value = this.settings.rideUpkeepInflation;
-      this.stallUpkeepMultiplierSpinner.value = this.settings.stallUpkeepMultiplier;
+      
+      this.syncWithSettings();
+      this.settings.onSaved = this.syncWithSettings.bind(this);
     }
 
     this.window.bringToFront();
@@ -93,7 +92,10 @@ export class SettingsWindow {
     title: "Cost Inflator",
     width: SettingsWindow.windowWidth,
     height: SettingsWindow.windowHeight,
-    onClose: () => this.window = undefined,
+    onClose: () => {
+      this.settings.onSaved = undefined;
+      this.window = undefined;
+    },
     widgets: [
       {
         name: "EnabledCheckbox",
@@ -162,4 +164,10 @@ export class SettingsWindow {
       this.stallUpkeepMultiplierSpinner,
     ]
   };
+
+  private syncWithSettings() {
+    this.rideUpkeepMultiplierSpinner.value = this.settings.rideUpkeepMultiplier;
+    this.rideUpkeepInflationSpinner.value = this.settings.rideUpkeepInflation;
+    this.stallUpkeepMultiplierSpinner.value = this.settings.stallUpkeepMultiplier;
+  }
 }

@@ -10,6 +10,8 @@ interface Settings {
   rideUpkeepInflation: number,
   /** Multiplier for running costs (upkeep) of stalls and facilities */
   stallUpkeepMultiplier: number,
+  /** Callback that is invoked when settings are saved */
+  onSaved?: () => void
 
   /** Saves settings to the park */
   save(): void
