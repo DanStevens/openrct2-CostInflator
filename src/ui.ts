@@ -10,7 +10,7 @@ export class SettingsWindow {
   private static readonly windowWidth = 200;
   private static readonly windowHeight = 180;
   private static readonly xStops = [5, 10, 15, 80, 130];
-  private static readonly yStops = [20, 40, 58, 60, 110, 128, 130, 78, 80];
+  private static readonly yStops = [20, 40, 58, 60, 110, 128, 130, 80, 82, 150, 152];
 
   private window?: Window;
 
@@ -35,7 +35,7 @@ export class SettingsWindow {
   private rideUpkeepInflationSpinner = widgets.createNumericSpinner({
     name: "RideUpkeepInflationSpinner",
     x: SettingsWindow.xStops[3],
-    y: SettingsWindow.yStops[8],
+    y: SettingsWindow.yStops[7],
     width: SettingsWindow.xStops[4] - SettingsWindow.yStops[3],
     height: standardControlHeight,
     initialValue: this.settings.rideUpkeepInflation,
@@ -48,7 +48,7 @@ export class SettingsWindow {
       this.settings.rideUpkeepInflation = to;
       this.settings.save();
     },
-    tooltip: "Monthly inflation of ride upkeep: once per month this value is added to the multiplier for ride upkeep"
+    tooltip: "Monthly inflation of ride running costs: once per month this value is added to the multiplier for ride running costs"
   });
 
   private stallUpkeepMultiplierSpinner = widgets.createNumericSpinner({
@@ -69,6 +69,25 @@ export class SettingsWindow {
     tooltip: "Multiplier for running costs (upkeep) of stalls and facilities"
   });
 
+  private stallUpkeepInflationSpinner = widgets.createNumericSpinner({
+    name: "StallUpkeepInflationSpinner",
+    x: SettingsWindow.xStops[3],
+    y: SettingsWindow.yStops[9],
+    width: SettingsWindow.xStops[4] - SettingsWindow.yStops[3],
+    height: standardControlHeight,
+    initialValue: this.settings.stallUpkeepInflation,
+    formatValue: v => v.toFixed(2),
+    min: -99.99,
+    max: 99.99,
+    step: 0.01,
+    onValueChanged: to => {
+      console.log("Setting stall upkeep inflation to", to);
+      this.settings.stallUpkeepInflation = to;
+      this.settings.save();
+    },
+    tooltip: "Monthly inflation of stall running costs: once per month this value is added to the multiplier for stall running costs"
+  });
+
   private enabledCheckbox?: CheckboxWidget;
 
   open() {
@@ -77,6 +96,7 @@ export class SettingsWindow {
       this.rideUpkeepMultiplierSpinner.bind(this.window.findWidget(this.rideUpkeepMultiplierSpinner.name!));
       this.rideUpkeepInflationSpinner.bind(this.window.findWidget(this.rideUpkeepInflationSpinner.name!));
       this.stallUpkeepMultiplierSpinner.bind(this.window.findWidget(this.stallUpkeepMultiplierSpinner.name!));
+      this.stallUpkeepInflationSpinner.bind(this.window.findWidget(this.stallUpkeepInflationSpinner.name!));
       this.enabledCheckbox = this.window.findWidget("EnabledCheckbox");
       this.enabledCheckbox.isChecked = this.settings.enabled;
       
@@ -130,6 +150,7 @@ export class SettingsWindow {
         width: SettingsWindow.xStops[3] - SettingsWindow.xStops[2],
         height: standardControlHeight,
         text: "Multiplier",
+        tooltip: this.rideUpkeepMultiplierSpinner.tooltip,
       },
       this.rideUpkeepMultiplierSpinner,
       {
@@ -140,6 +161,7 @@ export class SettingsWindow {
         width: SettingsWindow.xStops[3] - SettingsWindow.xStops[2],
         height: standardControlHeight,
         text: "Inflation",
+        tooltip: this.rideUpkeepInflationSpinner.tooltip,
       },
       this.rideUpkeepInflationSpinner,
 
@@ -160,8 +182,20 @@ export class SettingsWindow {
         width: SettingsWindow.xStops[3] - SettingsWindow.xStops[2],
         height: standardControlHeight,
         text: "Multiplier",
+        tooltip: this.stallUpkeepMultiplierSpinner.tooltip,
       },
       this.stallUpkeepMultiplierSpinner,
+      {
+        name: "StallRunningCostsInflationLabel",
+        type: "label",
+        x: SettingsWindow.xStops[2],
+        y: SettingsWindow.yStops[10],
+        width: SettingsWindow.xStops[3] - SettingsWindow.xStops[2],
+        height: standardControlHeight,
+        text: "Inflation",
+        tooltip: this.stallUpkeepInflationSpinner.tooltip,
+      },
+      this.stallUpkeepInflationSpinner,
     ]
   };
 
@@ -169,5 +203,6 @@ export class SettingsWindow {
     this.rideUpkeepMultiplierSpinner.value = this.settings.rideUpkeepMultiplier;
     this.rideUpkeepInflationSpinner.value = this.settings.rideUpkeepInflation;
     this.stallUpkeepMultiplierSpinner.value = this.settings.stallUpkeepMultiplier;
+    this.stallUpkeepInflationSpinner.value = this.settings.stallUpkeepInflation;
   }
 }

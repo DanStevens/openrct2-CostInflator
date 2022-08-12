@@ -31,6 +31,11 @@ function onMonthBegins() {
       settings.rideUpkeepMultiplier += settings.rideUpkeepInflation;
       console.log(`Ride upkeep inflated by ${settings.rideUpkeepInflation} to ${settings.rideUpkeepMultiplier}`);
     }
+
+    if (settings.stallUpkeepInflation !== 0) {
+      settings.stallUpkeepMultiplier += settings.stallUpkeepInflation;
+      console.log(`Stall upkeep inflated by ${settings.stallUpkeepInflation} to ${settings.stallUpkeepMultiplier}`);
+    }
   }
 
   settings.save();

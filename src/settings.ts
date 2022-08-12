@@ -7,12 +7,14 @@ class SettingsImpl implements Settings {
       this.rideUpkeepMultiplier = source.rideUpkeepMultiplier;
       this.rideUpkeepInflation = source.rideUpkeepInflation;
       this.stallUpkeepMultiplier = source.stallUpkeepMultiplier;
+      this.stallUpkeepInflation = source.stallUpkeepInflation;
     }
   }
   public enabled = true;
   public rideUpkeepMultiplier = 1.0;
   public rideUpkeepInflation = 0;
   public stallUpkeepMultiplier = 1.0;
+  public stallUpkeepInflation = 0;
 
   public onSaved?: () => void;
 
