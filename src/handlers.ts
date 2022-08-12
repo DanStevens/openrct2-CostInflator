@@ -25,6 +25,17 @@ function getMultiplierForRideClassification(classification: RideClassification):
   }
 }
 
+function onMonthBegins() {
+  if (settings.enabled) {
+    if (settings.rideUpkeepInflation !== 0) {
+      settings.rideUpkeepMultiplier += settings.rideUpkeepInflation;
+      console.log(`Ride upkeep inflated by ${settings.rideUpkeepInflation} to ${settings.rideUpkeepMultiplier}`);
+    }
+  }
+
+  settings.save();
+}
+
 export function handleUpkeepCalculate(e: RideRatingsCalculateArgs): void {
   if (settings.enabled) {
     const ride = map.getRide(e.rideId);
@@ -33,4 +44,9 @@ export function handleUpkeepCalculate(e: RideRatingsCalculateArgs): void {
   } else {
     console.log("Cost Inflator is disabled");
   }
+}
+
+export function handleIntervalDay(): void {
+  if (date.monthProgress === 0)
+    onMonthBegins();
 }

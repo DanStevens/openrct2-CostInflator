@@ -32,6 +32,25 @@ export class SettingsWindow {
     tooltip: "Multiplier for running costs (upkeep) of rides"
   });
 
+  private rideUpkeepInflationSpinner = widgets.createNumericSpinner({
+    name: "RideUpkeepInflationSpinner",
+    x: SettingsWindow.xStops[3],
+    y: SettingsWindow.yStops[8],
+    width: SettingsWindow.xStops[4] - SettingsWindow.yStops[3],
+    height: standardControlHeight,
+    initialValue: this.settings.rideUpkeepInflation,
+    formatValue: v => v.toFixed(2),
+    min: -99.99,
+    max: 99.99,
+    step: 0.01,
+    onValueChanged: to => {
+      console.log("Setting ride upkeep inflation to", to);
+      this.settings.rideUpkeepInflation = to;
+      this.settings.save();
+    },
+    tooltip: "Monthly inflation of ride upkeep: once per month this value is added to the multiplier for ride upkeep"
+  });
+
   private stallUpkeepMultiplierSpinner = widgets.createNumericSpinner({
     name: "StallUpkeepMultiplierSpinner",
     x: SettingsWindow.xStops[3],
@@ -49,16 +68,21 @@ export class SettingsWindow {
     },
     tooltip: "Multiplier for running costs (upkeep) of stalls and facilities"
   });
-  
+
   private enabledCheckbox?: CheckboxWidget;
 
   open() {
     if (this.window == null) {
       this.window = this.ui.openWindow(this.windowDesc);
       this.rideUpkeepMultiplierSpinner.bind(this.window.findWidget(this.rideUpkeepMultiplierSpinner.name!));
+      this.rideUpkeepInflationSpinner.bind(this.window.findWidget(this.rideUpkeepInflationSpinner.name!));
       this.stallUpkeepMultiplierSpinner.bind(this.window.findWidget(this.stallUpkeepMultiplierSpinner.name!));
       this.enabledCheckbox = this.window.findWidget("EnabledCheckbox");
       this.enabledCheckbox.isChecked = this.settings.enabled;
+
+      this.rideUpkeepMultiplierSpinner.value = this.settings.rideUpkeepMultiplier;
+      this.rideUpkeepInflationSpinner.value = this.settings.rideUpkeepInflation;
+      this.stallUpkeepMultiplierSpinner.value = this.settings.stallUpkeepMultiplier;
     }
 
     this.window.bringToFront();
@@ -106,6 +130,16 @@ export class SettingsWindow {
         text: "Multiplier",
       },
       this.rideUpkeepMultiplierSpinner,
+      {
+        name: "RideRunningCostsInflationLabel",
+        type: "label",
+        x: SettingsWindow.xStops[2],
+        y: SettingsWindow.yStops[8],
+        width: SettingsWindow.xStops[3] - SettingsWindow.xStops[2],
+        height: standardControlHeight,
+        text: "Inflation",
+      },
+      this.rideUpkeepInflationSpinner,
 
       {
         name: "StallRunningCostsGroupbox",

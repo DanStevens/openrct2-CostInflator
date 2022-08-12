@@ -6,6 +6,8 @@ interface Settings {
   enabled: boolean,
   /** Multiplier for running costs (upkeep) of rides */
   rideUpkeepMultiplier: number,
+  /** Multiplier for running costs (upkeep) is increased by this amount every month */
+  rideUpkeepInflation: number,
   /** Multiplier for running costs (upkeep) of stalls and facilities */
   stallUpkeepMultiplier: number,
 

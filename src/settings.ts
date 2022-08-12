@@ -5,11 +5,13 @@ class SettingsImpl implements Settings {
     if (source) {
       this.enabled = source.enabled;
       this.rideUpkeepMultiplier = source.rideUpkeepMultiplier;
+      this.rideUpkeepInflation = source.rideUpkeepInflation;
       this.stallUpkeepMultiplier = source.stallUpkeepMultiplier;
     }
   }
   public enabled = true;
   public rideUpkeepMultiplier = 1.0;
+  public rideUpkeepInflation = 0;
   public stallUpkeepMultiplier = 1.0;
 
   public save() {
