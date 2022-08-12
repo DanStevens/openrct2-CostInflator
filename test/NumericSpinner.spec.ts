@@ -36,9 +36,17 @@ describe("NumericSpinner", () => {
       expect(objUT.height).toBe(15);
       expect(objUT.name).toBe("NumericSpinner");
       expect(objUT.value).toBe(7);
-      expect(objUT.toString()).toBe('7');
+      expect(objUT.toString()).toBe('7.00');
       expect(objUT.step).toBe(0.01);
       expect(objUT.min).toBe(-16);
+    });
+
+    it.each([0, NaN, Infinity, -Infinity])("should throw when step is %d", (step) => {
+      expect(() => createObjUnderTest({ step })).toThrowError("step must be a finite value not equal to 0");
+    });
+
+    it("should not throw when step is undefined", () => {
+      expect(() => createObjUnderTest({ step: undefined })).not.toThrow();
     });
   });
 
@@ -54,30 +62,99 @@ describe("NumericSpinner", () => {
       const objUT = createObjUnderTest();
       expect(objUT.value).toBe(0);
     });
+
+    describe("should be rounded according to 'step' property", () => {
+      test.each([
+        [0, 1, 0],
+        [1, 1, 1],
+        [10, 1, 10],
+        [123, 1, 123],
+        [0, 0.1, 0.0],
+        [1, 0.1, 1.0],
+        [1.1, 0.1, 1.1],
+        [1.23, 0.1, 1.2],
+        [1.23, 0.01, 1.23],
+        [1.1, 0.01, 1.10],
+        [1.001, 0.01, 1.00],
+        [1.999, 0.01, 2.00],
+        [1.99, 0.01, 1.99],
+        [-0, 1, 0],
+        [-1, 1, -1],
+        [-10, 1, -10],
+        [-0, 0.1, 0.0],
+        [-1, 0.1, -1.0],
+        [-1.1, 0.1, -1.1],
+        [-1.23, 0.1, -1.2],
+        [-1.23, 0.01, -1.23],
+        [-1.1, 0.01, -1.10],
+        [-0.001, 0.01, 0.00]
+      ])("setting value to '%d' (given step of '%d') should be rounded to '%d'", (value, step, expected) => {
+        const objUT = createObjUnderTest({ step });
+        objUT.value = value;
+        expect(objUT.value).toBeCloseTo(expected);
+      });
+    });
   });
 
   describe("toString method", () => {
-    it("should return 'value' property formatted to whole number by default", () => {
+    it("should return 'value' property formatted to whole number, assuming default step", () => {
       const objUT = createObjUnderTest();
       objUT.value = 12.3456;
       expect(objUT.toString()).toBe("12");
+    });
+
+    test.each([
+      [0, 1, "0"],
+      [1, 1, "1"],
+      [10, 1, "10"],
+      [123, 1, "123"],
+      [0, 0.1, "0.0"],
+      [1, 0.1, "1.0"],
+      [1.1, 0.1, "1.1"],
+      [1.23, 0.1, "1.2"],
+      [1.23, 0.01, "1.23"],
+      [1.1, 0.01, "1.10"],
+      [1.001, 0.01, "1.00"],
+      [1.999, 0.01, "2.00"],
+      [1.99, 0.01, "1.99"],
+      [-0, 1, "0"],
+      [-1, 1, "-1"],
+      [-10, 1, "-10"],
+      [-0, 0.1, "0.0"],
+      [-1, 0.1, "-1.0"],
+      [-1.1, 0.1, "-1.1"],
+      [-1.23, 0.1, "-1.2"],
+      [-1.23, 0.01, "-1.23"],
+      [-1.1, 0.01, "-1.10"],
+      [-0.001, 0.01, "0.00"]
+    ])("given value '%d' and step '%d', should return '%s'", (value, step, expected) => {
+      const objUT = createObjUnderTest({
+        initialValue: value,
+        step
+      });
+      expect(objUT.toString()).toBe(expected);
     });
   });
 
   describe("formatValue property", () => {
     describe("can be used to control how value property is converted to a string (via toString)", () => {
       test.each([
-        [0, 'with default format', undefined, '0'],
-        [1, 'with default format', undefined, '1'],
-        [12.34, 'formatted to 2 decimal places', (v: number) => v.toFixed(2), '12.34'],
-        [0.25, 'formatted as a percentage', (v: number) => `${(v * 100).toFixed(0)}%`, '25%'],
-        [35, 'formatted as money', (v: number) => `$${(v / 10).toFixed(2)}`, '$3.50']
-      ])(
-        'Value of %f %s',
-        (value: number, formatDesc: string, format: ((v: number) => string) | undefined, expected: string) => {
+        [0, 1, 'with default format', undefined, '0'],
+        [1, 1, 'with default format', undefined, '1'],
+        [12.34, 0.01, 'formatted to 2 decimal places', (v: number) => v.toFixed(2), '12.34'],
+        [0.25, 0.25, 'formatted as a percentage', (v: number) => `${(v * 100).toFixed(0)}%`, '25%'],
+        [35, 0.1, 'formatted as money', (v: number) => `$${(v / 10).toFixed(2)}`, '$3.50']
+      ])("value %d step %d %s",
+        (value: number, 
+         step: number, 
+         formatDesc: string, 
+         format: ((v: number) => string) | undefined, 
+         expected: string) =>
+        {
           const objUT = createObjUnderTest({
             initialValue: value,
-            formatValue: format
+            formatValue: format,
+            step
           });
           expect(objUT.toString()).toBe(expected);
         }
@@ -222,6 +299,16 @@ describe("NumericSpinner", () => {
         expect(objUT.value).toBe(3);
       });
     });
+
+    // TODO
+    it.skip("should set 'value' to correct precision, when 'step' is a fraction", () => {
+      const objUT = createObjUnderTest({
+        initialValue: 0.04,
+        step: 0.01,
+      });
+      // expect(objUT.value).toBe(0.04);
+      // expect(objUT.toString()).toBe("0.04");
+    });
   });
 
   describe("onValueChanged property", () => {
@@ -286,28 +373,12 @@ describe("NumericSpinner", () => {
       expect(results.wasInvoked).toBe(false);
     });
 
-    it("should not be invoked when increment is called and step is 0", () => {
-      const { objUT, results } = createObjectsForOnValueChangedTest(0, 0);
-      expect(objUT.step).toBe(0);
-      objUT.increment();
-      expect(results.wasInvoked).toBe(false);
-    });
-
-    it("should not be invoked when increment is called and value is equal to max", () => {
-      const { objUT, results } = createObjectsForOnValueChangedTest(1, 1, 0, 1);
-      objUT.increment();
-      expect(results.wasInvoked).toBe(false);
-    });
-
-    it("should not be invoked when decrement is called and step is 0", () => {
-      const { objUT, results } = createObjectsForOnValueChangedTest(0, 0);
-      expect(objUT.step).toBe(0);
-      objUT.decrement();
-      expect(results.wasInvoked).toBe(false);
-    });
-
     it("should not be invoked when decrement is called and value is equal to min", () => {
       const { objUT, results } = createObjectsForOnValueChangedTest(0, 1, 0, 1);
+      expect(objUT.value).toBe(0);
+      expect(objUT.step).toBe(1);
+      expect(objUT.min).toBe(0);
+      expect(objUT.max).toBe(1);
       objUT.decrement();
       expect(results.wasInvoked).toBe(false);
     });

@@ -1,4 +1,4 @@
-import { clamp } from './utils';
+import { clamp, countDecimals, roundMultiple } from './utils';
 
 /**
  * The NumericSpinner widget is a SpinnerWidget that handles numbers for you
@@ -54,21 +54,28 @@ export interface NumericSpinnerRecipe extends Omit<WidgetBase, 'type'> {
 }
 
 class NumericSpinnerImpl implements NumericSpinner {
+  private static readonly defaultStep = 1;
+
   constructor(recipe: NumericSpinnerRecipe) {
+    const step = recipe.step ?? NumericSpinnerImpl.defaultStep;
+
+    if (step === 0 || !Number.isFinite(step))
+      throw new Error("step must be a finite value not equal to 0");
+
     this.x = recipe.x;
     this.y = recipe.y;
     this.height = recipe.height;
     this.width = recipe.width;
     this.name = recipe.name;
-    this.value = recipe.initialValue ?? 0;
-    this.onValueChanged = recipe.onValueChanged;
-    this.step = recipe.step ?? 1;
+    this.step = step;
     this.min = recipe.min;
     this.max = recipe.max;
+    this.value = recipe.initialValue ?? 0;
     this.formatValue = recipe.formatValue;
     this.tooltip = recipe.tooltip;
     this.isDisabled = recipe.isDisabled;
     this.isVisible = recipe.isVisible;
+    this.onValueChanged = recipe.onValueChanged;
     this.onClick = recipe.onClick ?? this.defaultOnClickHandler.bind(this);
   }
 
@@ -86,7 +93,6 @@ class NumericSpinnerImpl implements NumericSpinner {
   private _value: number = 0;
   private _boundSpinner?: SpinnerWidget;
 
-  text?: string = this.toString();
   window?: Window;
   tooltip?: string;
   isDisabled?: boolean;
@@ -103,9 +109,11 @@ class NumericSpinnerImpl implements NumericSpinner {
 
   set value(to) {
     const from = this._value;
-    this._value = to;
+    const roundedTo = roundMultiple(to, this.step);
+    const clampedTo = clamp(roundedTo, this.min, this.max);
+    this._value = clampedTo;
     this.syncBoundSpinner();
-    if (to !== from) this.invokeValueChanged(to, from);
+    if (clampedTo !== from) this.invokeValueChanged(clampedTo, from);
   }
 
   private syncBoundSpinner() {
@@ -114,11 +122,11 @@ class NumericSpinnerImpl implements NumericSpinner {
   }
 
   increment() {
-    this.value = clamp(this.value + this.step, this.min, this.max);
+    this.value += this.step;
   }
 
   decrement() {
-    this.value = clamp(this.value - this.step, this.min, this.max);
+    this.value -= this.step;
   }
 
   bind(spinner: SpinnerWidget) {
@@ -127,7 +135,9 @@ class NumericSpinnerImpl implements NumericSpinner {
   }
 
   toString() {
-    return this.formatValue ? this.formatValue(this.value) : this.value.toFixed(0);
+    return this.formatValue ?
+      this.formatValue(this.value) :
+      this.value.toFixed(countDecimals(this.step ?? NumericSpinnerImpl.defaultStep));
   }
 
   private invokeValueChanged(to: number, from: number) {
