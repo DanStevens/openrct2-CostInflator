@@ -48,7 +48,8 @@ export class SettingsWindow {
       this.settings.rideUpkeepInflation = to;
       this.settings.save();
     },
-    tooltip: "Monthly inflation of ride running costs: once per month this value is added to the multiplier for ride running costs"
+    tooltip: "Monthly inflation of ride running costs: once per month " +
+             "this value is added to the multiplier for ride running costs"
   });
 
   private stallUpkeepMultiplierSpinner = widgets.createNumericSpinner({
@@ -85,7 +86,8 @@ export class SettingsWindow {
       this.settings.stallUpkeepInflation = to;
       this.settings.save();
     },
-    tooltip: "Monthly inflation of stall running costs: once per month this value is added to the multiplier for stall running costs"
+    tooltip: "Monthly inflation of stall running costs: once per month " +
+             "this value is added to the multiplier for stall running costs"
   });
 
   private enabledCheckbox?: CheckboxWidget;
