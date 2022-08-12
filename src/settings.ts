@@ -3,13 +3,14 @@ const parkStorage = context.getParkStorage();
 class SettingsImpl implements Settings {
   constructor(source?: Settings) {
     if (source) {
-      this.enabled = source.enabled;
-      this.rideUpkeepMultiplier = source.rideUpkeepMultiplier;
-      this.rideUpkeepInflation = source.rideUpkeepInflation;
-      this.stallUpkeepMultiplier = source.stallUpkeepMultiplier;
-      this.stallUpkeepInflation = source.stallUpkeepInflation;
+      this.enabled = source.enabled ?? this.enabled;
+      this.rideUpkeepMultiplier = source.rideUpkeepMultiplier ?? this.rideUpkeepMultiplier;
+      this.rideUpkeepInflation = source.rideUpkeepInflation ?? this.rideUpkeepInflation;
+      this.stallUpkeepMultiplier = source.stallUpkeepMultiplier ?? this.stallUpkeepMultiplier;
+      this.stallUpkeepInflation = source.stallUpkeepInflation ?? this.stallUpkeepInflation;
     }
   }
+  
   public enabled = true;
   public rideUpkeepMultiplier = 1.0;
   public rideUpkeepInflation = 0;
