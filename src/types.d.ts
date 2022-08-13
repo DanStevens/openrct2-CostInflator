@@ -18,3 +18,5 @@ interface Settings {
   /** Saves settings to the park */
   save(): void
 }
+
+type CostCategory = 'rideUpkeep' | 'stallUpkeep'

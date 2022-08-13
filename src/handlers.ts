@@ -1,6 +1,13 @@
 /* eslint-disable import/prefer-default-export */
 import settings from "./settings";
+import { clamp } from "./utils";
 
+/**
+ * Calculates the running cost (upkeep) for the given ride, stall or facility
+ * @param ride The ride/stall/facility to calculate running costs
+ * @param multiplier the current running cost of the ride is multiplied by this
+ * @returns the current running cost of the ride multiplied by `multiplier`
+ */
 function calcUpkeep(ride: Ride, multiplier: number) {
   if (ride.runningCost > 0) {
     const newUpkeep = +(ride.runningCost * multiplier).toFixed(2);
@@ -13,6 +20,11 @@ function calcUpkeep(ride: Ride, multiplier: number) {
   return ride.runningCost;
 }
 
+/**
+ * Gets the multiplier for the given RideClassification
+ * @param classification the ride classification ('stall' and 'facility' are considered the same)
+ * @returns the value of the corresponding Multiplier setting
+ */
 function getMultiplierForRideClassification(classification: RideClassification): number {
   switch (classification) {
     case "ride":
@@ -25,22 +37,37 @@ function getMultiplierForRideClassification(classification: RideClassification):
   }
 }
 
+/**
+ * Inflates the Multiplier setting by the corresponding Inflation setting
+ * @param category The CostCategory
+ * This function retrieves the Inflation setting corresponding with the given category and adds it
+ * to the corresponding Multiplier setting
+ * @note Multiplier setting won't go negative; zero is the minimum allowed value.
+ */
+function inflateMultiplier(category: CostCategory) {
+  const inflation = settings[`${category}Inflation`];
+  const multiplier = settings[`${category}Multiplier`];
+  if (inflation !== 0 && multiplier !== 0) {
+    settings[`${category}Multiplier`] = clamp(multiplier + inflation, 0, null);
+    console.log(`${category} multipler inflated by ${inflation} to ${settings[`${category}Multiplier`]}`);
+  }
+}
+
+/**
+ * Invoked at the start of every ingame month
+ */
 function onMonthBegins() {
   if (settings.enabled) {
-    if (settings.rideUpkeepInflation !== 0) {
-      settings.rideUpkeepMultiplier += settings.rideUpkeepInflation;
-      console.log(`Ride upkeep inflated by ${settings.rideUpkeepInflation} to ${settings.rideUpkeepMultiplier}`);
-    }
-
-    if (settings.stallUpkeepInflation !== 0) {
-      settings.stallUpkeepMultiplier += settings.stallUpkeepInflation;
-      console.log(`Stall upkeep inflated by ${settings.stallUpkeepInflation} to ${settings.stallUpkeepMultiplier}`);
-    }
+    inflateMultiplier('rideUpkeep');
+    inflateMultiplier('stallUpkeep');
   }
 
   settings.save();
 }
 
+/**
+ * Callback for 'ride.ratings.calculate' plugin API hook
+ */
 export function handleUpkeepCalculate(e: RideRatingsCalculateArgs): void {
   if (settings.enabled) {
     const ride = map.getRide(e.rideId);
@@ -51,6 +78,9 @@ export function handleUpkeepCalculate(e: RideRatingsCalculateArgs): void {
   }
 }
 
+/**
+ * Callback for 'inverval.day' plugin API hook
+ */
 export function handleIntervalDay(): void {
   if (date.monthProgress === 0)
     onMonthBegins();
