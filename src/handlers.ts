@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import settings from "./settings";
 import { clamp } from "./utils";
 
@@ -66,15 +65,26 @@ function onMonthBegins() {
 }
 
 /**
+ * Returns a value indicating whether the given RideRating is valid
+ * @param rating The ride stats to test
+ * @returns `true` if the ride stats are valid; otherwise false
+ *
+ * RideRating is valid if all of its metrics are greater than zero.
+ * Within the game, a ride's rating can be invalid if it is yet
+ * to be calculated or are in the process of being calculated.
+ */
+function isRideRatingValid(rating: RideRating) {
+  return rating.excitement > 0 && rating.intensity > 0 && rating.nausea;
+}
+
+/**
  * Callback for 'ride.ratings.calculate' plugin API hook
  */
 export function handleUpkeepCalculate(e: RideRatingsCalculateArgs): void {
-  if (settings.enabled) {
+  if (settings.enabled && isRideRatingValid(e)) {
     const ride = map.getRide(e.rideId);
     const multiplier = getMultiplierForRideClassification(ride.classification);
     ride.runningCost = calcUpkeep(ride, multiplier);
-  } else {
-    console.log("Cost Inflator is disabled");
   }
 }
 

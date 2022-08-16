@@ -20,3 +20,12 @@ interface Settings {
 }
 
 type CostCategory = 'rideUpkeep' | 'stallUpkeep'
+
+/**
+ * The rating metrics for a ride
+ */
+interface RideRating {
+  excitement: number,
+  intensity: number,
+  nausea: number,
+}
