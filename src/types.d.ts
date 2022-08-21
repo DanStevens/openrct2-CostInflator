@@ -1,4 +1,10 @@
 /**
+ * A cost (expense) in RCT that varies depending on the associate object.
+ * Examples include ride construction, upkeep and landscaping
+ */
+ type VariableCostCategory = 'rideUpkeep' | 'stallUpkeep'
+
+/**
  * Settings for the Cost Inflator plugin
  */
 interface Settings {
@@ -18,8 +24,6 @@ interface Settings {
   /** Saves settings to the park */
   save(): void
 }
-
-type CostCategory = 'rideUpkeep' | 'stallUpkeep'
 
 /**
  * The rating metrics for a ride

@@ -43,7 +43,7 @@ function getMultiplierForRideClassification(classification: RideClassification):
  * to the corresponding Multiplier setting
  * @note Multiplier setting won't go negative; zero is the minimum allowed value.
  */
-function inflateMultiplier(category: CostCategory) {
+function inflateMultiplier(category: VariableCostCategory) {
   const inflation = settings[`${category}Inflation`];
   const multiplier = settings[`${category}Multiplier`];
   if (inflation !== 0 && multiplier !== 0) {
