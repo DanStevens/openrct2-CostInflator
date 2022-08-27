@@ -1,4 +1,4 @@
-import settings from "./settings";
+import settings, { VariableCostCategories } from "./settings";
 import { clamp } from "./utils";
 
 /**
@@ -27,10 +27,10 @@ function calcUpkeep(ride: Ride, multiplier: number) {
 function getMultiplierForRideClassification(classification: RideClassification): number {
   switch (classification) {
     case "ride":
-      return settings.rideUpkeepMultiplier;
+      return settings.multipliers.ride_construction;
     case "stall":
     case "facility":
-      return settings.stallUpkeepMultiplier;
+      return settings.multipliers.stall_construction;
     default:
       return 1.0;
   }
@@ -44,11 +44,11 @@ function getMultiplierForRideClassification(classification: RideClassification):
  * @note Multiplier setting won't go negative; zero is the minimum allowed value.
  */
 function inflateMultiplier(category: VariableCostCategory) {
-  const inflation = settings[`${category}Inflation`];
-  const multiplier = settings[`${category}Multiplier`];
+  const multiplier = settings.multipliers[category];
+  const inflation = settings.inflators[category];
   if (inflation !== 0 && multiplier !== 0) {
-    settings[`${category}Multiplier`] = clamp(multiplier + inflation, 0, null);
-    console.log(`${category} multipler inflated by ${inflation} to ${settings[`${category}Multiplier`]}`);
+    settings.multipliers[category] = clamp(multiplier + inflation, 0, null);
+    console.log(`${category} multipler inflated by ${inflation} to ${settings.multipliers[category]}`);
   }
 }
 
@@ -57,8 +57,9 @@ function inflateMultiplier(category: VariableCostCategory) {
  */
 function onMonthBegins() {
   if (settings.enabled) {
-    inflateMultiplier('rideUpkeep');
-    inflateMultiplier('stallUpkeep');
+    Object.keys(VariableCostCategories).forEach(
+      category => inflateMultiplier(category as VariableCostCategory)
+    );
   }
 
   settings.save();

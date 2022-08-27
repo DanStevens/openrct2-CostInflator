@@ -7,7 +7,7 @@ const main = (): void => {
   ui.registerMenuItem("Cost Inflator", () => settingsWindow.open());
 
   if (settings.enabled) {
-    console.log('Ride upkeep will be multiplied by', settings.rideUpkeepMultiplier);
+    console.log('Ride upkeep will be multiplied by', settings.multipliers.ride_construction);
     context.subscribe('ride.ratings.calculate', handleUpkeepCalculate);
     context.subscribe('interval.day', handleIntervalDay);
   }

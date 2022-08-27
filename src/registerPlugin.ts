@@ -4,7 +4,7 @@ import main from './main';
 
 registerPlugin({
   name: 'CostInflator',
-  version: '0.1.1',
+  version: '0.2.0',
   authors: ['DanStevens'],
   type: 'local',
   licence: 'MIT',

@@ -20,13 +20,13 @@ export class SettingsWindow {
     y: SettingsWindow.yStops[2],
     width: SettingsWindow.xStops[4] - SettingsWindow.yStops[3],
     height: standardControlHeight,
-    initialValue: this.settings.rideUpkeepMultiplier,
+    initialValue: this.settings.multipliers.ride_construction,
     formatValue: v => v.toFixed(2),
     min: 0,
     max: 99.99,
     step: 0.01,
     onValueChanged: to => {
-      this.settings.rideUpkeepMultiplier = to;
+      this.settings.multipliers.ride_construction = to;
       this.settings.save();
     },
     tooltip: "Multiplier for running costs (upkeep) of rides"
@@ -38,14 +38,14 @@ export class SettingsWindow {
     y: SettingsWindow.yStops[7],
     width: SettingsWindow.xStops[4] - SettingsWindow.yStops[3],
     height: standardControlHeight,
-    initialValue: this.settings.rideUpkeepInflation,
+    initialValue: this.settings.inflators.ride_construction,
     formatValue: v => v.toFixed(2),
     min: -99.99,
     max: 99.99,
     step: 0.01,
     onValueChanged: to => {
       console.log("Setting ride upkeep inflation to", to);
-      this.settings.rideUpkeepInflation = to;
+      this.settings.inflators.ride_construction = to;
       this.settings.save();
     },
     tooltip: "Monthly inflation of ride running costs: once per month " +
@@ -58,13 +58,13 @@ export class SettingsWindow {
     y: SettingsWindow.yStops[5],
     width: SettingsWindow.xStops[4] - SettingsWindow.yStops[3],
     height: standardControlHeight,
-    initialValue: this.settings.stallUpkeepMultiplier,
+    initialValue: this.settings.multipliers.stall_construction,
     formatValue: v => v.toFixed(2),
     min: 0,
     max: 99.99,
     step: 0.01,
     onValueChanged: to => {
-      this.settings.stallUpkeepMultiplier = to;
+      this.settings.multipliers.stall_construction = to;
       this.settings.save();
     },
     tooltip: "Multiplier for running costs (upkeep) of stalls and facilities"
@@ -76,14 +76,14 @@ export class SettingsWindow {
     y: SettingsWindow.yStops[9],
     width: SettingsWindow.xStops[4] - SettingsWindow.yStops[3],
     height: standardControlHeight,
-    initialValue: this.settings.stallUpkeepInflation,
+    initialValue: this.settings.inflators.stall_construction,
     formatValue: v => v.toFixed(2),
     min: -99.99,
     max: 99.99,
     step: 0.01,
     onValueChanged: to => {
       console.log("Setting stall upkeep inflation to", to);
-      this.settings.stallUpkeepInflation = to;
+      this.settings.inflators.stall_construction = to;
       this.settings.save();
     },
     tooltip: "Monthly inflation of stall running costs: once per month " +
@@ -202,9 +202,9 @@ export class SettingsWindow {
   };
 
   private syncWithSettings() {
-    this.rideUpkeepMultiplierSpinner.value = this.settings.rideUpkeepMultiplier;
-    this.rideUpkeepInflationSpinner.value = this.settings.rideUpkeepInflation;
-    this.stallUpkeepMultiplierSpinner.value = this.settings.stallUpkeepMultiplier;
-    this.stallUpkeepInflationSpinner.value = this.settings.stallUpkeepInflation;
+    this.rideUpkeepMultiplierSpinner.value = this.settings.multipliers.ride_construction;
+    this.stallUpkeepMultiplierSpinner.value = this.settings.multipliers.stall_construction;
+    this.rideUpkeepInflationSpinner.value = this.settings.inflators.ride_construction;
+    this.stallUpkeepInflationSpinner.value = this.settings.inflators.stall_construction;
   }
 }

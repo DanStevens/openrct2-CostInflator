@@ -1,21 +1,32 @@
+/**
+ * A cost (expense) in RCT that varies depending on the associate object.
+ * Examples include ride construction, upkeep and landscaping
+ */
+// eslint-disable-next-line no-shadow
+export const VariableCostCategories = [
+  'ride_construction',
+  'stall_construction'
+] as const;
+
 const parkStorage = context.getParkStorage();
 
 class SettingsImpl implements Settings {
   constructor(source?: Settings) {
     if (source) {
       this.enabled = source.enabled ?? this.enabled;
-      this.rideUpkeepMultiplier = source.rideUpkeepMultiplier ?? this.rideUpkeepMultiplier;
-      this.rideUpkeepInflation = source.rideUpkeepInflation ?? this.rideUpkeepInflation;
-      this.stallUpkeepMultiplier = source.stallUpkeepMultiplier ?? this.stallUpkeepMultiplier;
-      this.stallUpkeepInflation = source.stallUpkeepInflation ?? this.stallUpkeepInflation;
+
+      // eslint-disable-next-line guard-for-in
+      VariableCostCategories.forEach(c => {
+        console.log('c => ', c);
+        this.multipliers[c] = source.multipliers[c] ?? this.multipliers[c] ?? 1;
+        this.inflators[c] = source.inflators[c] ?? this.inflators[c] ?? 0;
+      });
     }
   }
-  
+
   public enabled = true;
-  public rideUpkeepMultiplier = 1.0;
-  public rideUpkeepInflation = 0;
-  public stallUpkeepMultiplier = 1.0;
-  public stallUpkeepInflation = 0;
+  public multipliers = {} as { [category in VariableCostCategory]: number };
+  public inflators = {} as { [category in VariableCostCategory]: number };
 
   public onSaved?: () => void;
 

@@ -44,7 +44,8 @@
     "no-return-assign": "off",
     "no-underscore-dangle": "off",
     "max-classes-per-file": "off",
-    "object-curly-newline": "off"
+    "object-curly-newline": "off",
+    "no-restricted-syntax": "off"
   },
   "settings": {
     "import/resolver": {
